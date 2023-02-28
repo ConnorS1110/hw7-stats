@@ -41,7 +41,7 @@ class COLS:
             col = COL(n, s)
             self.all.append(col)
             if not col.isIgnored:
-                if hasattr(col, &#39;isKlass&#39;):
+                if hasattr(col, &#39;isKlass&#39;) and col.isKlass:
                     self.klass = col
                 if col.isGoal:
                     self.y.append(col)
@@ -78,7 +78,7 @@ class COLS:
             col = COL(n, s)
             self.all.append(col)
             if not col.isIgnored:
-                if hasattr(col, &#39;isKlass&#39;):
+                if hasattr(col, &#39;isKlass&#39;) and col.isKlass:
                     self.klass = col
                 if col.isGoal:
                     self.y.append(col)

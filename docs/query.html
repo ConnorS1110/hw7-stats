@@ -146,7 +146,7 @@ def value(has, nB = 1, nR = 1, sGoal = True):
     b,r = b/(nB+1/float(&#34;inf&#34;)), r/(nR+1/float(&#34;inf&#34;))
     return (b ** 2) / (b + r)
 
-def dist(data, t1, t2, cols = None):
+def dist(data, t1, t2, cols=None, d=None, dist1=None):
     &#34;&#34;&#34;
     Function:
         dist
@@ -160,25 +160,26 @@ def dist(data, t1, t2, cols = None):
     Output:
         Normalized distance between row1 and row2
     &#34;&#34;&#34;
+    def sym(x, y):
+        return 0 if x == y else 1
+
+    def num(x, y):
+        if x == &#34;?&#34;:
+            x = 1 if y &lt; 0.5 else 1
+        if y == &#34;?&#34;:
+            y = 1 if x &lt; 0.5 else 1
+        return abs(x - y)
+
     def dist1(col, x, y):
         if x == &#34;?&#34; and y == &#34;?&#34;:
             return 1
-        if hasattr(col, &#34;isSym&#34;):
-            return 0 if x == y else 1
-        else:
-            x, y = norm(col, x), norm(col, y)
-            if x == &#34;?&#34;:
-                x = 1 if y &lt; 0.5 else 1
-            if y == &#34;?&#34;:
-                y = 1 if x &lt; 0.5 else 1
-            return abs(x - y)
+        return sym(x, y) if hasattr(col, &#34;isSym&#34;) and col.isSym else num(norm(col, x), norm(col, y))
 
-    d, n = 0, 1 / float(&#34;inf&#34;)
-    cols = cols if cols else data.cols.x
+    d, cols = 0, cols or data[&#34;cols&#34;][&#34;x&#34;]
     for col in cols:
-        n += 1
-        d += dist1(col.col, float(t1[col.col.at]), float(t2[col.col.at]))**util.args.p
-    return (d / n)**(1 / util.args.p)
+        d += dist1(col, t1[col[&#34;at&#34;]], t2[col[&#34;at&#34;]]) ** util.args.p
+    return (d / len(cols)) ** (1 / util.args.p)
+
 
 def better(data, row1, row2):
     &#34;&#34;&#34;
@@ -201,7 +202,13 @@ def better(data, row1, row2):
         s1 = s1 - math.exp(col.col.w * (x-y)/len(ys))
         s2 = s2 - math.exp(col.col.w * (y - x)/len(ys))
 
-    return s1/len(ys) &lt; s2 / len(ys)</code></pre>
+    return s1/len(ys) &lt; s2 / len(ys)
+
+def betters(data, n = None):
+    def callBack(r1, r2):
+        return better(data, r1, r2)
+    tmp = sorted(data[&#34;rows&#34;], key=callBack)
+    return tmp[:n], tmp[n:] if n else tmp</code></pre>
 </details>
 </section>
 <section>
@@ -253,8 +260,24 @@ row2 - second row</p>
     return s1/len(ys) &lt; s2 / len(ys)</code></pre>
 </details>
 </dd>
+<dt id="src.query.betters"><code class="name flex">
+<span>def <span class="ident">betters</span></span>(<span>data, n=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def betters(data, n = None):
+    def callBack(r1, r2):
+        return better(data, r1, r2)
+    tmp = sorted(data[&#34;rows&#34;], key=callBack)
+    return tmp[:n], tmp[n:] if n else tmp</code></pre>
+</details>
+</dd>
 <dt id="src.query.dist"><code class="name flex">
-<span>def <span class="ident">dist</span></span>(<span>data, t1, t2, cols=None)</span>
+<span>def <span class="ident">dist</span></span>(<span>data, t1, t2, cols=None, d=None, dist1=None)</span>
 </code></dt>
 <dd>
 <div class="desc"><h2 id="function">Function</h2>
@@ -272,7 +295,7 @@ cols - cols to use as the data for distance</p>
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def dist(data, t1, t2, cols = None):
+<pre><code class="python">def dist(data, t1, t2, cols=None, d=None, dist1=None):
     &#34;&#34;&#34;
     Function:
         dist
@@ -286,25 +309,25 @@ cols - cols to use as the data for distance</p>
     Output:
         Normalized distance between row1 and row2
     &#34;&#34;&#34;
+    def sym(x, y):
+        return 0 if x == y else 1
+
+    def num(x, y):
+        if x == &#34;?&#34;:
+            x = 1 if y &lt; 0.5 else 1
+        if y == &#34;?&#34;:
+            y = 1 if x &lt; 0.5 else 1
+        return abs(x - y)
+
     def dist1(col, x, y):
         if x == &#34;?&#34; and y == &#34;?&#34;:
             return 1
-        if hasattr(col, &#34;isSym&#34;):
-            return 0 if x == y else 1
-        else:
-            x, y = norm(col, x), norm(col, y)
-            if x == &#34;?&#34;:
-                x = 1 if y &lt; 0.5 else 1
-            if y == &#34;?&#34;:
-                y = 1 if x &lt; 0.5 else 1
-            return abs(x - y)
+        return sym(x, y) if hasattr(col, &#34;isSym&#34;) and col.isSym else num(norm(col, x), norm(col, y))
 
-    d, n = 0, 1 / float(&#34;inf&#34;)
-    cols = cols if cols else data.cols.x
+    d, cols = 0, cols or data[&#34;cols&#34;][&#34;x&#34;]
     for col in cols:
-        n += 1
-        d += dist1(col.col, float(t1[col.col.at]), float(t2[col.col.at]))**util.args.p
-    return (d / n)**(1 / util.args.p)</code></pre>
+        d += dist1(col, t1[col[&#34;at&#34;]], t2[col[&#34;at&#34;]]) ** util.args.p
+    return (d / len(cols)) ** (1 / util.args.p)</code></pre>
 </details>
 </dd>
 <dt id="src.query.div"><code class="name flex">
@@ -549,6 +572,7 @@ sGoal - Goal value to find frequency of</p>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="two-column">
 <li><code><a title="src.query.better" href="#src.query.better">better</a></code></li>
+<li><code><a title="src.query.betters" href="#src.query.betters">betters</a></code></li>
 <li><code><a title="src.query.dist" href="#src.query.dist">dist</a></code></li>
 <li><code><a title="src.query.div" href="#src.query.div">div</a></code></li>
 <li><code><a title="src.query.has" href="#src.query.has">has</a></code></li>

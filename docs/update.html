@@ -42,31 +42,29 @@ def row(data, t):
     return data
 
 
-def add(col, x, n = 1):
+def add(col, x, n = None):
+    def sym(t):
+        t[x] = n + (t.get(x, 0))
+        if t[x] &gt; col.most:
+            col.most, col.mode = t[x], x
+
+    def num(t):
+        col.lo, col.hi = min(x, col.lo), max(x, col.hi)
+        if len(t) &lt; util.args.Max:
+            col.ok = False
+            t.append(x)
+        elif util.rand() &lt; util.args.Max / col.n:
+            col.ok = False
+            t[util.rint(0, len(t) - 1)] = x
+
     if x != &#34;?&#34;:
-        col.n += n # Source of variable &#39;n&#39;
+        n = n or 1
+        col.n += n
         if hasattr(col, &#34;isSym&#34;) and col.isSym:
-            col.has[x] = n + (col.has.get(x, 0))
-            if col.has[x] &gt; col.most:
-                col.most = col.has[x]
-                col.mode = x
+            sym(col.has)
         else:
             x = float(x)
-            col.lo = min(x, col.lo)
-            col.hi = max(x, col.hi)
-            all = len(col.has)
-            if all &lt; util.args.Max:
-                pos = all + 1
-            elif random.random() &lt; util.args.Max / col.n:
-                pos = util.rint(1, all)
-            else:
-                pos = None
-            if pos:
-                if isinstance(col.has, dict):
-                    col.has[pos] = x
-                else:
-                    col.has.append(x)
-                col.ok = False
+            num(col.has)
 
 def adds(col, t):
     for value in t or []:
@@ -87,7 +85,7 @@ def extend(range, n, s):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="src.update.add"><code class="name flex">
-<span>def <span class="ident">add</span></span>(<span>col, x, n=1)</span>
+<span>def <span class="ident">add</span></span>(<span>col, x, n=None)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -95,31 +93,29 @@ def extend(range, n, s):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def add(col, x, n = 1):
+<pre><code class="python">def add(col, x, n = None):
+    def sym(t):
+        t[x] = n + (t.get(x, 0))
+        if t[x] &gt; col.most:
+            col.most, col.mode = t[x], x
+
+    def num(t):
+        col.lo, col.hi = min(x, col.lo), max(x, col.hi)
+        if len(t) &lt; util.args.Max:
+            col.ok = False
+            t.append(x)
+        elif util.rand() &lt; util.args.Max / col.n:
+            col.ok = False
+            t[util.rint(0, len(t) - 1)] = x
+
     if x != &#34;?&#34;:
-        col.n += n # Source of variable &#39;n&#39;
+        n = n or 1
+        col.n += n
         if hasattr(col, &#34;isSym&#34;) and col.isSym:
-            col.has[x] = n + (col.has.get(x, 0))
-            if col.has[x] &gt; col.most:
-                col.most = col.has[x]
-                col.mode = x
+            sym(col.has)
         else:
             x = float(x)
-            col.lo = min(x, col.lo)
-            col.hi = max(x, col.hi)
-            all = len(col.has)
-            if all &lt; util.args.Max:
-                pos = all + 1
-            elif random.random() &lt; util.args.Max / col.n:
-                pos = util.rint(1, all)
-            else:
-                pos = None
-            if pos:
-                if isinstance(col.has, dict):
-                    col.has[pos] = x
-                else:
-                    col.has.append(x)
-                col.ok = False</code></pre>
+            num(col.has)</code></pre>
 </details>
 </dd>
 <dt id="src.update.adds"><code class="name flex">

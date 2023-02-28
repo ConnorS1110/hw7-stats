@@ -74,7 +74,7 @@ def per(t, p):
         Row from t based on probability p
     &#34;&#34;&#34;
     p = math.floor(((p or 0.5) * len(t)))
-    return t[max(0, min(len(t), p))]
+    return t[max(0, min(len(t) - 1, p))]
 
 def kap(listOfCols, fun):
     &#34;&#34;&#34;
@@ -257,7 +257,7 @@ p - probability</p>
         Row from t based on probability p
     &#34;&#34;&#34;
     p = math.floor(((p or 0.5) * len(t)))
-    return t[max(0, min(len(t), p))]</code></pre>
+    return t[max(0, min(len(t) - 1, p))]</code></pre>
 </details>
 </dd>
 <dt id="src.list.slice"><code class="name flex">
