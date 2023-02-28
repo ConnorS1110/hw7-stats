@@ -27,7 +27,8 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">import math
-from miscellaneous import *
+import miscellaneous as misc
+import utility as util
 
 def many(t, n):
     &#34;&#34;&#34;
@@ -57,12 +58,23 @@ def any(t):
     Output:
         Random row from t
     &#34;&#34;&#34;
-    rintVal = rint(None, len(t) - 1)
+    rintVal = util.rint(None, len(t) - 1)
     return t[rintVal]
 
 def per(t, p):
-    p = math.floor(((p or 0.5) * len(t)) + 0.5)
-    return t[max(1, min(len(t), p))]
+    &#34;&#34;&#34;
+    Function:
+        per
+    Description:
+        Selects a random row based off a given probability
+    Input:
+        t - DATA object
+        p - probability
+    Output:
+        Row from t based on probability p
+    &#34;&#34;&#34;
+    p = math.floor(((p or 0.5) * len(t)))
+    return t[max(0, min(len(t), p))]
 
 def kap(listOfCols, fun):
     &#34;&#34;&#34;
@@ -83,6 +95,19 @@ def kap(listOfCols, fun):
     return u
 
 def slice(t, go = None, stop = None, inc = None):
+    &#34;&#34;&#34;
+    Function:
+        slice
+    Description:
+        Returns a slice of data
+    Input:
+        t - data to slice
+        go - start point
+        stop - stop point
+        inc - increment amount
+    Output:
+        u - Sliced data
+    &#34;&#34;&#34;
     if go and go &lt; 0:
         go = len(t) - 1 + go
     if stop and stop &lt; 0:
@@ -127,7 +152,7 @@ def slice(t, go = None, stop = None, inc = None):
     Output:
         Random row from t
     &#34;&#34;&#34;
-    rintVal = rint(None, len(t) - 1)
+    rintVal = util.rint(None, len(t) - 1)
     return t[rintVal]</code></pre>
 </details>
 </dd>
@@ -206,26 +231,68 @@ n - Number of row samples</p>
 <span>def <span class="ident">per</span></span>(<span>t, p)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>per</p>
+<h2 id="description">Description</h2>
+<p>Selects a random row based off a given probability</p>
+<h2 id="input">Input</h2>
+<p>t - DATA object
+p - probability</p>
+<h2 id="output">Output</h2>
+<p>Row from t based on probability p</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def per(t, p):
-    p = math.floor(((p or 0.5) * len(t)) + 0.5)
-    return t[max(1, min(len(t), p))]</code></pre>
+    &#34;&#34;&#34;
+    Function:
+        per
+    Description:
+        Selects a random row based off a given probability
+    Input:
+        t - DATA object
+        p - probability
+    Output:
+        Row from t based on probability p
+    &#34;&#34;&#34;
+    p = math.floor(((p or 0.5) * len(t)))
+    return t[max(0, min(len(t), p))]</code></pre>
 </details>
 </dd>
 <dt id="src.list.slice"><code class="name flex">
 <span>def <span class="ident">slice</span></span>(<span>t, go=None, stop=None, inc=None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>slice</p>
+<h2 id="description">Description</h2>
+<p>Returns a slice of data</p>
+<h2 id="input">Input</h2>
+<p>t - data to slice
+go - start point
+stop - stop point
+inc - increment amount</p>
+<h2 id="output">Output</h2>
+<p>u - Sliced data</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def slice(t, go = None, stop = None, inc = None):
+    &#34;&#34;&#34;
+    Function:
+        slice
+    Description:
+        Returns a slice of data
+    Input:
+        t - data to slice
+        go - start point
+        stop - stop point
+        inc - increment amount
+    Output:
+        u - Sliced data
+    &#34;&#34;&#34;
     if go and go &lt; 0:
         go = len(t) - 1 + go
     if stop and stop &lt; 0:

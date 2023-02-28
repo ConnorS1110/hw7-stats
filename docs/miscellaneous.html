@@ -27,8 +27,6 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from utility import *
-# from list import many : defined many here to avoid circular import error
-import re
 import math
 import utility as util
 import list as listModule
@@ -39,6 +37,17 @@ def itself(x):
     return x
 
 def cliffsDelta(ns1, ns2):
+    &#34;&#34;&#34;
+    Function:
+        cliffsDelta
+    Description:
+        Calculates Cliff&#39;s delta effect size measure
+    Input:
+        ns1 - first list of rows
+        ns2 - second list of rows
+    Output:
+        Cliff&#39;s delta effect size
+    &#34;&#34;&#34;
     if len(ns1) &gt; 256: ns1 = listModule.many(ns1, 256)
     if len(ns2) &gt; 256: ns2 = listModule.many(ns2, 256)
     if len(ns1) &gt; (10 * len(ns2)): ns1 = listModule.many(ns1, 10 * len(ns2))
@@ -52,66 +61,20 @@ def cliffsDelta(ns1, ns2):
     return abs(lt - gt) / n &gt; util.args.cliffs
 
 def diffs(nums1, nums2):
+    &#34;&#34;&#34;
+    Function:
+        diffs
+    Description:
+        Creates a list of cliff&#39;s deltas and a textual description of the col
+    Input:
+        nums1 - first list of rows
+        nums2 - second list of rows
+    Output:
+        List of cliff&#39;s deltas and a textual description of the col
+    &#34;&#34;&#34;
     def kap(nums, fn):
         return [fn(k, v) for k, v in enumerate(nums)]
-    return kap(nums1, lambda k, nums: (cliffsDelta(nums.col.has, nums2[k].col.has), nums.col.txt))
-
-def coerce(s):
-    def fun(s1):
-        if s1 == &#34;true&#34;:
-            return True
-        elif s1 == &#34;false&#34;:
-            return False
-        return s1
-
-    return math.tointeger(s) or float(s) or fun(s.strip())
-
-def cells(s):
-    t = []
-    for s1 in re.findall(&#34;[^,]+&#34;, s):
-        t.append(coerce(s1))
-    return t
-
-def lines(sFilename, fun):
-    with open(sFilename, &#34;r&#34;) as src:
-        for s in src:
-            s = s.rstrip(&#34;\r\n&#34;)
-            fun(s)
-    src.close()
-
-def csv(sFilename, fun):
-    lines(sFilename, lambda line: fun(cells(line)))
-
-def rand(low, high):
-    &#34;&#34;&#34;
-    Function:
-        rand
-    Description:
-        Creates a random number
-    Input:
-        low - low value
-        high - high value
-    Output:
-        Random number
-    &#34;&#34;&#34;
-    global Seed
-    low, high = low or 0, high or 1
-    Seed = (16807 * Seed) % 2147483647
-    return low + (high - low) * Seed / 2147483647
-
-def rint(lo = None, hi = None):
-    &#34;&#34;&#34;
-    Function:
-        rint
-    Description:
-        Makes a random number
-    Input:
-        low - low value
-        high - high value
-    Output:
-        Random number
-    &#34;&#34;&#34;
-    return math.floor(0.5 + rand(lo, hi))</code></pre>
+    return kap(nums1, lambda k, nums: (cliffsDelta(nums.col.has, nums2[k].col.has), nums.col.txt))</code></pre>
 </details>
 </section>
 <section>
@@ -121,32 +84,35 @@ def rint(lo = None, hi = None):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="src.miscellaneous.cells"><code class="name flex">
-<span>def <span class="ident">cells</span></span>(<span>s)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def cells(s):
-    t = []
-    for s1 in re.findall(&#34;[^,]+&#34;, s):
-        t.append(coerce(s1))
-    return t</code></pre>
-</details>
-</dd>
 <dt id="src.miscellaneous.cliffsDelta"><code class="name flex">
 <span>def <span class="ident">cliffsDelta</span></span>(<span>ns1, ns2)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>cliffsDelta</p>
+<h2 id="description">Description</h2>
+<p>Calculates Cliff's delta effect size measure</p>
+<h2 id="input">Input</h2>
+<p>ns1 - first list of rows
+ns2 - second list of rows</p>
+<h2 id="output">Output</h2>
+<p>Cliff's delta effect size</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def cliffsDelta(ns1, ns2):
+    &#34;&#34;&#34;
+    Function:
+        cliffsDelta
+    Description:
+        Calculates Cliff&#39;s delta effect size measure
+    Input:
+        ns1 - first list of rows
+        ns2 - second list of rows
+    Output:
+        Cliff&#39;s delta effect size
+    &#34;&#34;&#34;
     if len(ns1) &gt; 256: ns1 = listModule.many(ns1, 256)
     if len(ns2) &gt; 256: ns2 = listModule.many(ns2, 256)
     if len(ns1) &gt; (10 * len(ns2)): ns1 = listModule.many(ns1, 10 * len(ns2))
@@ -160,49 +126,35 @@ def rint(lo = None, hi = None):
     return abs(lt - gt) / n &gt; util.args.cliffs</code></pre>
 </details>
 </dd>
-<dt id="src.miscellaneous.coerce"><code class="name flex">
-<span>def <span class="ident">coerce</span></span>(<span>s)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def coerce(s):
-    def fun(s1):
-        if s1 == &#34;true&#34;:
-            return True
-        elif s1 == &#34;false&#34;:
-            return False
-        return s1
-
-    return math.tointeger(s) or float(s) or fun(s.strip())</code></pre>
-</details>
-</dd>
-<dt id="src.miscellaneous.csv"><code class="name flex">
-<span>def <span class="ident">csv</span></span>(<span>sFilename, fun)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def csv(sFilename, fun):
-    lines(sFilename, lambda line: fun(cells(line)))</code></pre>
-</details>
-</dd>
 <dt id="src.miscellaneous.diffs"><code class="name flex">
 <span>def <span class="ident">diffs</span></span>(<span>nums1, nums2)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>diffs</p>
+<h2 id="description">Description</h2>
+<p>Creates a list of cliff's deltas and a textual description of the col</p>
+<h2 id="input">Input</h2>
+<p>nums1 - first list of rows
+nums2 - second list of rows</p>
+<h2 id="output">Output</h2>
+<p>List of cliff's deltas and a textual description of the col</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def diffs(nums1, nums2):
+    &#34;&#34;&#34;
+    Function:
+        diffs
+    Description:
+        Creates a list of cliff&#39;s deltas and a textual description of the col
+    Input:
+        nums1 - first list of rows
+        nums2 - second list of rows
+    Output:
+        List of cliff&#39;s deltas and a textual description of the col
+    &#34;&#34;&#34;
     def kap(nums, fn):
         return [fn(k, v) for k, v in enumerate(nums)]
     return kap(nums1, lambda k, nums: (cliffsDelta(nums.col.has, nums2[k].col.has), nums.col.txt))</code></pre>
@@ -219,90 +171,6 @@ def rint(lo = None, hi = None):
 </summary>
 <pre><code class="python">def itself(x):
     return x</code></pre>
-</details>
-</dd>
-<dt id="src.miscellaneous.lines"><code class="name flex">
-<span>def <span class="ident">lines</span></span>(<span>sFilename, fun)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def lines(sFilename, fun):
-    with open(sFilename, &#34;r&#34;) as src:
-        for s in src:
-            s = s.rstrip(&#34;\r\n&#34;)
-            fun(s)
-    src.close()</code></pre>
-</details>
-</dd>
-<dt id="src.miscellaneous.rand"><code class="name flex">
-<span>def <span class="ident">rand</span></span>(<span>low, high)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>rand</p>
-<h2 id="description">Description</h2>
-<p>Creates a random number</p>
-<h2 id="input">Input</h2>
-<p>low - low value
-high - high value</p>
-<h2 id="output">Output</h2>
-<p>Random number</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rand(low, high):
-    &#34;&#34;&#34;
-    Function:
-        rand
-    Description:
-        Creates a random number
-    Input:
-        low - low value
-        high - high value
-    Output:
-        Random number
-    &#34;&#34;&#34;
-    global Seed
-    low, high = low or 0, high or 1
-    Seed = (16807 * Seed) % 2147483647
-    return low + (high - low) * Seed / 2147483647</code></pre>
-</details>
-</dd>
-<dt id="src.miscellaneous.rint"><code class="name flex">
-<span>def <span class="ident">rint</span></span>(<span>lo=None, hi=None)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>rint</p>
-<h2 id="description">Description</h2>
-<p>Makes a random number</p>
-<h2 id="input">Input</h2>
-<p>low - low value
-high - high value</p>
-<h2 id="output">Output</h2>
-<p>Random number</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def rint(lo = None, hi = None):
-    &#34;&#34;&#34;
-    Function:
-        rint
-    Description:
-        Makes a random number
-    Input:
-        low - low value
-        high - high value
-    Output:
-        Random number
-    &#34;&#34;&#34;
-    return math.floor(0.5 + rand(lo, hi))</code></pre>
 </details>
 </dd>
 </dl>
@@ -322,16 +190,10 @@ high - high value</p>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="two-column">
-<li><code><a title="src.miscellaneous.cells" href="#src.miscellaneous.cells">cells</a></code></li>
+<ul class="">
 <li><code><a title="src.miscellaneous.cliffsDelta" href="#src.miscellaneous.cliffsDelta">cliffsDelta</a></code></li>
-<li><code><a title="src.miscellaneous.coerce" href="#src.miscellaneous.coerce">coerce</a></code></li>
-<li><code><a title="src.miscellaneous.csv" href="#src.miscellaneous.csv">csv</a></code></li>
 <li><code><a title="src.miscellaneous.diffs" href="#src.miscellaneous.diffs">diffs</a></code></li>
 <li><code><a title="src.miscellaneous.itself" href="#src.miscellaneous.itself">itself</a></code></li>
-<li><code><a title="src.miscellaneous.lines" href="#src.miscellaneous.lines">lines</a></code></li>
-<li><code><a title="src.miscellaneous.rand" href="#src.miscellaneous.rand">rand</a></code></li>
-<li><code><a title="src.miscellaneous.rint" href="#src.miscellaneous.rint">rint</a></code></li>
 </ul>
 </li>
 </ul>

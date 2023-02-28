@@ -32,6 +32,16 @@ import utility as util
 import math
 
 def has(col):
+    &#34;&#34;&#34;
+    Function:
+        has
+    Description:
+        Returns has on col
+    Input:
+        col - col to retrieve has from
+    Output:
+        col.has
+    &#34;&#34;&#34;
     if not hasattr(col, &#34;isSym&#34;) and not col.ok:
         if isinstance(col.has, dict):
             col.has = dict(sorted(col.has.items(), key = lambda item: item[1]))
@@ -41,10 +51,30 @@ def has(col):
     return col.has
 
 def mid(col):
-    return col.mode if hasattr(col, &#34;isSym&#34;) else per(has(col), 0.5)
+    &#34;&#34;&#34;
+    Function:
+        mid
+    Description:
+        Returns median of col
+    Input:
+        col - col to find median of
+    Output:
+        col.mode if col col has isSym and is true, otherwise return the middle value in col
+    &#34;&#34;&#34;
+    return col.mode if hasattr(col, &#34;isSym&#34;) and col.isSym else per(has(col), 0.5)
 
 def div(col):
-    if hasattr(col, &#34;isSym&#34;):
+    &#34;&#34;&#34;
+    Function:
+        mid
+    Description:
+        Returns standard deviation of col
+    Input:
+        col - col to find deviation of
+    Output:
+        Standard deviation of a col
+    &#34;&#34;&#34;
+    if hasattr(col, &#34;isSym&#34;) and col.isSym:
         e = 0
         if isinstance(col.has, dict):
             for n in col.has.values():
@@ -54,7 +84,7 @@ def div(col):
                 e = e - n/col.n * math.log(n/col.n, 2)
         return e
     else:
-        return (per(has(col),.9) - per(has(col), .1))/2.58
+        return (per(has(col),.9) - per(has(col), .1)) / 2.58
 
 def stats(data, fun = None, cols = None, nPlaces = 2):
     &#34;&#34;&#34;
@@ -63,8 +93,8 @@ def stats(data, fun = None, cols = None, nPlaces = 2):
     Description:
         Gets a given statistic and returns the rounded answer
     Input:
-        self - current DATA instance
-        what - statistic to be returned
+        data - current DATA instance
+        fun - statistic to be returned
         cols - cols to use as the data for statistic
         nPlaces - # of decimal places stat is rounded to
     Output:
@@ -94,6 +124,19 @@ def norm(num, n):
 
 
 def value(has, nB = 1, nR = 1, sGoal = True):
+    &#34;&#34;&#34;
+    Function:
+        value
+    Description:
+        Finds frequency of sGoal in has
+    Input:
+        has - data to find frequency of
+        nB - best
+        nR - rest
+        sGoal - Goal value to find frequency of
+    Output:
+        Frequency of sGoal in has
+    &#34;&#34;&#34;
     b, r = 0, 0
     for x, n in has.items():
         if x == sGoal:
@@ -104,6 +147,19 @@ def value(has, nB = 1, nR = 1, sGoal = True):
     return (b ** 2) / (b + r)
 
 def dist(data, t1, t2, cols = None):
+    &#34;&#34;&#34;
+    Function:
+        dist
+    Description:
+        Finds normalized distance between row1 and row2
+    Input:
+        self - current DATA instance
+        t1 - First row
+        t2 - Second row
+        cols - cols to use as the data for distance
+    Output:
+        Normalized distance between row1 and row2
+    &#34;&#34;&#34;
     def dist1(col, x, y):
         if x == &#34;?&#34; and y == &#34;?&#34;:
             return 1
@@ -125,6 +181,18 @@ def dist(data, t1, t2, cols = None):
     return (d / n)**(1 / util.args.p)
 
 def better(data, row1, row2):
+    &#34;&#34;&#34;
+    Function:
+        better
+    Description:
+        Returns whether the half is better than the other
+    Input:
+        data - data to compares
+        row1 - first row
+        row2 - second row
+    Output:
+        Boolean whether first half is better than second half
+    &#34;&#34;&#34;
     s1, s2, ys = 0, 0, data.cols.y
     for col in ys:
         x = norm(col.col, float(row1[col.col.at]) if row1[col.col.at] != &#34;?&#34; else row1[col.col.at])
@@ -147,12 +215,33 @@ def better(data, row1, row2):
 <span>def <span class="ident">better</span></span>(<span>data, row1, row2)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>better</p>
+<h2 id="description">Description</h2>
+<p>Returns whether the half is better than the other</p>
+<h2 id="input">Input</h2>
+<p>data - data to compares
+row1 - first row
+row2 - second row</p>
+<h2 id="output">Output</h2>
+<p>Boolean whether first half is better than second half</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def better(data, row1, row2):
+    &#34;&#34;&#34;
+    Function:
+        better
+    Description:
+        Returns whether the half is better than the other
+    Input:
+        data - data to compares
+        row1 - first row
+        row2 - second row
+    Output:
+        Boolean whether first half is better than second half
+    &#34;&#34;&#34;
     s1, s2, ys = 0, 0, data.cols.y
     for col in ys:
         x = norm(col.col, float(row1[col.col.at]) if row1[col.col.at] != &#34;?&#34; else row1[col.col.at])
@@ -168,12 +257,35 @@ def better(data, row1, row2):
 <span>def <span class="ident">dist</span></span>(<span>data, t1, t2, cols=None)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>dist</p>
+<h2 id="description">Description</h2>
+<p>Finds normalized distance between row1 and row2</p>
+<h2 id="input">Input</h2>
+<p>self - current DATA instance
+t1 - First row
+t2 - Second row
+cols - cols to use as the data for distance</p>
+<h2 id="output">Output</h2>
+<p>Normalized distance between row1 and row2</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def dist(data, t1, t2, cols = None):
+    &#34;&#34;&#34;
+    Function:
+        dist
+    Description:
+        Finds normalized distance between row1 and row2
+    Input:
+        self - current DATA instance
+        t1 - First row
+        t2 - Second row
+        cols - cols to use as the data for distance
+    Output:
+        Normalized distance between row1 and row2
+    &#34;&#34;&#34;
     def dist1(col, x, y):
         if x == &#34;?&#34; and y == &#34;?&#34;:
             return 1
@@ -199,13 +311,30 @@ def better(data, row1, row2):
 <span>def <span class="ident">div</span></span>(<span>col)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>mid</p>
+<h2 id="description">Description</h2>
+<p>Returns standard deviation of col</p>
+<h2 id="input">Input</h2>
+<p>col - col to find deviation of</p>
+<h2 id="output">Output</h2>
+<p>Standard deviation of a col</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def div(col):
-    if hasattr(col, &#34;isSym&#34;):
+    &#34;&#34;&#34;
+    Function:
+        mid
+    Description:
+        Returns standard deviation of col
+    Input:
+        col - col to find deviation of
+    Output:
+        Standard deviation of a col
+    &#34;&#34;&#34;
+    if hasattr(col, &#34;isSym&#34;) and col.isSym:
         e = 0
         if isinstance(col.has, dict):
             for n in col.has.values():
@@ -215,19 +344,36 @@ def better(data, row1, row2):
                 e = e - n/col.n * math.log(n/col.n, 2)
         return e
     else:
-        return (per(has(col),.9) - per(has(col), .1))/2.58</code></pre>
+        return (per(has(col),.9) - per(has(col), .1)) / 2.58</code></pre>
 </details>
 </dd>
 <dt id="src.query.has"><code class="name flex">
 <span>def <span class="ident">has</span></span>(<span>col)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>has</p>
+<h2 id="description">Description</h2>
+<p>Returns has on col</p>
+<h2 id="input">Input</h2>
+<p>col - col to retrieve has from</p>
+<h2 id="output">Output</h2>
+<p>col.has</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def has(col):
+    &#34;&#34;&#34;
+    Function:
+        has
+    Description:
+        Returns has on col
+    Input:
+        col - col to retrieve has from
+    Output:
+        col.has
+    &#34;&#34;&#34;
     if not hasattr(col, &#34;isSym&#34;) and not col.ok:
         if isinstance(col.has, dict):
             col.has = dict(sorted(col.has.items(), key = lambda item: item[1]))
@@ -241,13 +387,30 @@ def better(data, row1, row2):
 <span>def <span class="ident">mid</span></span>(<span>col)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>mid</p>
+<h2 id="description">Description</h2>
+<p>Returns median of col</p>
+<h2 id="input">Input</h2>
+<p>col - col to find median of</p>
+<h2 id="output">Output</h2>
+<p>col.mode if col col has isSym and is true, otherwise return the middle value in col</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def mid(col):
-    return col.mode if hasattr(col, &#34;isSym&#34;) else per(has(col), 0.5)</code></pre>
+    &#34;&#34;&#34;
+    Function:
+        mid
+    Description:
+        Returns median of col
+    Input:
+        col - col to find median of
+    Output:
+        col.mode if col col has isSym and is true, otherwise return the middle value in col
+    &#34;&#34;&#34;
+    return col.mode if hasattr(col, &#34;isSym&#34;) and col.isSym else per(has(col), 0.5)</code></pre>
 </details>
 </dd>
 <dt id="src.query.norm"><code class="name flex">
@@ -291,8 +454,8 @@ n - value to normalize</p>
 <h2 id="description">Description</h2>
 <p>Gets a given statistic and returns the rounded answer</p>
 <h2 id="input">Input</h2>
-<p>self - current DATA instance
-what - statistic to be returned
+<p>data - current DATA instance
+fun - statistic to be returned
 cols - cols to use as the data for statistic
 nPlaces - # of decimal places stat is rounded to</p>
 <h2 id="output">Output</h2>
@@ -308,8 +471,8 @@ nPlaces - # of decimal places stat is rounded to</p>
     Description:
         Gets a given statistic and returns the rounded answer
     Input:
-        self - current DATA instance
-        what - statistic to be returned
+        data - current DATA instance
+        fun - statistic to be returned
         cols - cols to use as the data for statistic
         nPlaces - # of decimal places stat is rounded to
     Output:
@@ -328,12 +491,35 @@ nPlaces - # of decimal places stat is rounded to</p>
 <span>def <span class="ident">value</span></span>(<span>has, nB=1, nR=1, sGoal=True)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>value</p>
+<h2 id="description">Description</h2>
+<p>Finds frequency of sGoal in has</p>
+<h2 id="input">Input</h2>
+<p>has - data to find frequency of
+nB - best
+nR - rest
+sGoal - Goal value to find frequency of</p>
+<h2 id="output">Output</h2>
+<p>Frequency of sGoal in has</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def value(has, nB = 1, nR = 1, sGoal = True):
+    &#34;&#34;&#34;
+    Function:
+        value
+    Description:
+        Finds frequency of sGoal in has
+    Input:
+        has - data to find frequency of
+        nB - best
+        nR - rest
+        sGoal - Goal value to find frequency of
+    Output:
+        Frequency of sGoal in has
+    &#34;&#34;&#34;
     b, r = 0, 0
     for x, n in has.items():
         if x == sGoal:
