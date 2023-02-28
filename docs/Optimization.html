@@ -28,15 +28,25 @@
 </summary>
 <pre><code class="python">import utility as util
 from cluster import *
-from query import *
+import query as query
 
 def sway(data):
+    &#34;&#34;&#34;
+    Function:
+        sway
+    Description:
+        Finds the best half of the data by recursion
+    Input:
+        data - data to sway
+    Output:
+        Swayed data
+    &#34;&#34;&#34;
     def worker(rows, worse, above = None):
         if len(rows) &lt;= len(data.rows) ** util.args.min:
             return rows, many(worse, util.args.rest*len(rows))
         else:
             l , r, A, B,_ = half(data, rows, None, above)
-            if better(data, B, A):
+            if query.better(data, B, A):
                 l, r, A, B = r, l, B, A
             for row in r:
                 worse.append(row)
@@ -56,18 +66,35 @@ def sway(data):
 <span>def <span class="ident">sway</span></span>(<span>data)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>sway</p>
+<h2 id="description">Description</h2>
+<p>Finds the best half of the data by recursion</p>
+<h2 id="input">Input</h2>
+<p>data - data to sway</p>
+<h2 id="output">Output</h2>
+<p>Swayed data</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def sway(data):
+    &#34;&#34;&#34;
+    Function:
+        sway
+    Description:
+        Finds the best half of the data by recursion
+    Input:
+        data - data to sway
+    Output:
+        Swayed data
+    &#34;&#34;&#34;
     def worker(rows, worse, above = None):
         if len(rows) &lt;= len(data.rows) ** util.args.min:
             return rows, many(worse, util.args.rest*len(rows))
         else:
             l , r, A, B,_ = half(data, rows, None, above)
-            if better(data, B, A):
+            if query.better(data, B, A):
                 l, r, A, B = r, l, B, A
             for row in r:
                 worse.append(row)

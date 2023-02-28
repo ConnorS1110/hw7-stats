@@ -82,6 +82,17 @@ def tree(data, rows = None, cols = None, above = None):
     return here
 
 def showTree(tree, lvl=0):
+    &#34;&#34;&#34;
+    Function:
+        showTree
+    Description:
+        Displays optimization of data as a tree
+    Input:
+        tree - data
+        lvl - how deep the tree is
+    Output:
+        None
+    &#34;&#34;&#34;
     if tree:
         print(&#34;{}[{}]&#34;.format(&#34;|.. &#34; * lvl, len(tree[&#34;data&#34;].rows)), end=&#34;&#34;)
         if lvl == 0 or not &#34;left&#34; in tree:
@@ -168,12 +179,31 @@ c - Distance between A and B</p></div>
 <span>def <span class="ident">showTree</span></span>(<span>tree, lvl=0)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>showTree</p>
+<h2 id="description">Description</h2>
+<p>Displays optimization of data as a tree</p>
+<h2 id="input">Input</h2>
+<p>tree - data
+lvl - how deep the tree is</p>
+<h2 id="output">Output</h2>
+<p>None</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def showTree(tree, lvl=0):
+    &#34;&#34;&#34;
+    Function:
+        showTree
+    Description:
+        Displays optimization of data as a tree
+    Input:
+        tree - data
+        lvl - how deep the tree is
+    Output:
+        None
+    &#34;&#34;&#34;
     if tree:
         print(&#34;{}[{}]&#34;.format(&#34;|.. &#34; * lvl, len(tree[&#34;data&#34;].rows)), end=&#34;&#34;)
         if lvl == 0 or not &#34;left&#34; in tree:

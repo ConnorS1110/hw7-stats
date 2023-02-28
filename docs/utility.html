@@ -36,7 +36,6 @@ from sym import SYM
 from data import DATA
 from update import *
 import query as query
-from copy import deepcopy
 import miscellaneous as misc
 import cluster as cluster
 import Optimization as opt
@@ -69,73 +68,9 @@ Seed = 937162211
 egs = {}
 n = 0
 
-def print_all_attributes(obj):
-    stringToPrint = &#34;{ &#34;
-    for attr, value in vars(obj).items():
-        stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
-    return stringToPrint + &#34;}&#34;
-
 def dofile(filename):
     with open(filename) as f:
         return json.load(f)
-
-def transpose(t):
-    u = []
-    for i in range(len(t[0])):
-        u.append([t[j][i] for j in range(len(t))])
-    return u
-
-def repCols(cols):
-    copyCols = deepcopy(cols)
-    for col in cols:
-        col[-1] = str(col[0]) + &#34;:&#34; + str(col[-1])
-        for j in range(1, len(col)):
-            col[j - 1] = col[j]
-        col.pop()
-    cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
-    cols[0][-1] = &#34;thingX&#34;
-    return DATA(cols)
-
-def repRows(t, rows, u=None):
-    rows = deepcopy(rows)
-    for j, s in enumerate(rows[-1]):
-        rows[0][j] = str(rows[0][j]) + &#34;:&#34; + str(s)
-    rows.pop()
-    for n, row in enumerate(rows):
-        if n==0:
-            row.append(&#34;thingX&#34;)
-        else:
-            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n]
-            row.append(u[-1])
-    return DATA(rows)
-
-def show(node, what= None, cols = None, nPlaces = None, lvl=None):
-    &#34;&#34;&#34;
-    Function:
-        show
-    Description:
-        Displays optimization of data as a tree
-    Input:
-        node - data
-        what - stat to display
-        cols - data columns
-        nPlaces - # of decimal places to display stats
-        lvl - how deep the tree is
-    Output:
-        None
-    &#34;&#34;&#34;
-    if node:
-        lvl = lvl or 0
-        print(&#34;|.. &#34; * lvl, end=&#34;&#34;)
-        if (&#34;left&#34; not in node):
-            print(last(last(node[&#34;data&#34;].rows).cells))
-        else:
-            print(str(int(100 * node[&#34;C&#34;])))
-        show(node.get(&#34;left&#34;, None), what,cols, nPlaces, lvl+1)
-        show(node.get(&#34;right&#34;, None), what,cols,nPlaces, lvl+1)
-
-def last(t):
-    return t[-1]
 
 def rint(lo = None, hi = None):
     &#34;&#34;&#34;
@@ -189,25 +124,6 @@ def eg(key, string, fun):
 def oo():
     pass
 
-def cosine(a, b, c):
-    &#34;&#34;&#34;
-    Function:
-        cosine
-    Description:
-        Finds x, y of line between a &amp; b
-    Input:
-        a - First point
-        b - Second point
-        c - distance between a &amp; b
-    Output:
-        x2 - x of line between a &amp; b
-        y - y of line between a &amp; b
-    &#34;&#34;&#34;
-    x1 = (a ** 2 + c ** 2 - b ** 2) / (2 * c)
-    x2 = max(0, min(1, x1))
-    y = (abs(a ** 2 - x2 ** 2)) ** 0.5
-    return x2, y
-
 def randFunc():
     &#34;&#34;&#34;
     Function:
@@ -217,7 +133,7 @@ def randFunc():
     Input:
         None
     Output:
-        checks if m1 equals m2 and that they round to 0.5 as a boolean
+        checks that 1000 random ints are unique from each other
     &#34;&#34;&#34;
     global args
     global Seed
@@ -229,12 +145,23 @@ def randFunc():
     u = []
     for i in range(1000):
         u.append(rint(100))
+    Seed = 937162211
     for index, value in enumerate(t):
         if (value != u[index]):
             return False
     return True
 
 def someFunc():
+    &#34;&#34;&#34;
+    Function:
+        someFunc
+    Description:
+        Callback function to test add function
+    Input:
+        None
+    Output:
+        10000 numbers are added without error
+    &#34;&#34;&#34;
     global args
     args.Max = 32
     num1 = NUM()
@@ -252,7 +179,7 @@ def symFunc():
     Input:
         None
     Output:
-        &#39;a&#39; is the median value in the array and that the div to 3 decimal points equals 1.379 as a boolean
+        &#39;a&#39; is the median value in the array and that the div to 3 decimal points equals 1.38 as a boolean
     &#34;&#34;&#34;
     sym = adds(SYM(), [&#34;a&#34;,&#34;a&#34;,&#34;a&#34;,&#34;a&#34;,&#34;b&#34;,&#34;b&#34;,&#34;c&#34;])
     print(query.mid(sym), round(query.div(sym), 2))
@@ -320,25 +247,6 @@ def getCliArgs():
     parser.add_argument(&#34;-R&#34;, &#34;--Reuse&#34;, type=bool, default=True, required=False, help=&#34;child splits reuse a parent pole&#34;)
 
     args = parser.parse_args()
-
-def printCLIvalues():
-    &#34;&#34;&#34;
-    Function:
-        printCLIvalues
-    Description:
-        Prints the arguments
-    Input:
-        None
-    Output:
-        None
-    &#34;&#34;&#34;
-    cli_args = {}
-    cli_args[&#34;dump&#34;] = args.dump
-    cli_args[&#34;go&#34;] = args.go
-    cli_args[&#34;help&#34;] = args.help
-    cli_args[&#34;seed&#34;] = args.seed
-    cli_args[&#34;file&#34;] = args.file
-    print(cli_args)
 
 def csvFunc():
     &#34;&#34;&#34;
@@ -415,22 +323,6 @@ def cloneFunc():
     print(query.stats(data1))
     print(query.stats(data2))
 
-def clusterFunc():
-    &#34;&#34;&#34;
-    Function:
-        clusterFunc
-    Description:
-        Callback function to test cluster function in DATA class
-    Input:
-        None
-    Output:
-        the correct data is output from the cluster function
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    show(data.cluster(), &#34;mid&#34;, data.cols.y, 1)
-
 def swayFunc():
     &#34;&#34;&#34;
     Function:
@@ -456,24 +348,6 @@ def swayFunc():
     print(&#34;\nall ~= best?&#34;, misc.diffs(best.cols.y, data.cols.y))
     print(&#34;best ~= rest?&#34;, misc.diffs(best.cols.y, rest.cols.y))
 
-def aroundFunc():
-    &#34;&#34;&#34;
-    Function:
-        aroundFunc
-    Description:
-        Callback function to test around function in DATA class
-    Input:
-        None
-    Output:
-        the rows are correctly sorted for the DATA object
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    for n, t in enumerate(data.around(data.rows[1])):
-        if n % 50 == 0:
-            print(n, round(t[1], 2), t[0].cells)
-
 def halfFunc():
     &#34;&#34;&#34;
     Function:
@@ -495,45 +369,23 @@ def halfFunc():
     print(&#34;l&#34;, query.stats(l))
     print(&#34;r&#34;, query.stats(r))
 
-def repColsFunc():
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    rawData = dofile(full_path)
-    t = repCols(rawData[&#34;cols&#34;])
-    for col in t.cols.all:
-        print(vars(col))
-    for row in t.rows:
-        print(vars(row))
-
-def synonymsFunc():
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())
-
-def reprowsFunc():
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    t = dofile(full_path)
-    rows = repRows(t, transpose(t[&#34;cols&#34;]))
-    for col in rows.cols.all:
-        print(vars(col))
-    for row in rows.rows:
-        print(vars(row))
-
-def copyFunc():
-    t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
-    t2 = deepcopy(t1)
-    t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
-    print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))
-
-
 def cliffsFunc():
+    &#34;&#34;&#34;
+    Function:
+        cliffsFunc
+    Description:
+        Callback function to test cliffsDelta function
+    Input:
+        None
+    Output:
+        all cliffsDelta values are returned correctly
+    &#34;&#34;&#34;
     assert misc.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]) == False, &#34;First cliff fails&#34;
     assert misc.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]) == True, &#34;Second cliff fails&#34;
     t1, t2 = [], []
     for i in range(1000):
-        t1.append(util.rand())
-        t2.append(math.sqrt(util.rand()))
+        t1.append(rand())
+        t2.append(math.sqrt(rand()))
     assert misc.cliffsDelta(t1, t1) == False, &#34;Third cliff fails&#34;
     assert misc.cliffsDelta(t1, t2) == True, &#34;Fourth cliff fails&#34;
     diff, j = False, 1.0
@@ -544,6 +396,16 @@ def cliffsFunc():
         j *= 1.025
 
 def distFunc():
+    &#34;&#34;&#34;
+    Function:
+        distFunc
+    Description:
+        Callback function to test dist function
+    Input:
+        None
+    Output:
+        the dist values are correctly added to the NUM object
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     dataOBJ = DATA()
@@ -554,6 +416,16 @@ def distFunc():
     print({&#34;lo&#34;: num.lo, &#34;hi&#34;: num.hi, &#34;mid&#34;: round(query.mid(num)), &#34;div&#34;: round(query.div(num))})
 
 def treeFunc():
+    &#34;&#34;&#34;
+    Function:
+        treeFunc
+    Description:
+        Callback function to test tree and showTree functions
+    Input:
+        None
+    Output:
+        the tree data is correctly displayed
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     dataOBJ = DATA()
@@ -561,6 +433,16 @@ def treeFunc():
     cluster.showTree(cluster.tree(data))
 
 def binsFunc():
+    &#34;&#34;&#34;
+    Function:
+        binsFunc
+    Description:
+        Callback function to test bins function
+    Input:
+        None
+    Output:
+        the bins are correctly printed
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     dataOBJ = DATA()
@@ -584,51 +466,33 @@ def binsFunc():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
-<dt id="src.utility.aroundFunc"><code class="name flex">
-<span>def <span class="ident">aroundFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>aroundFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test around function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the rows are correctly sorted for the DATA object</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def aroundFunc():
-    &#34;&#34;&#34;
-    Function:
-        aroundFunc
-    Description:
-        Callback function to test around function in DATA class
-    Input:
-        None
-    Output:
-        the rows are correctly sorted for the DATA object
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    for n, t in enumerate(data.around(data.rows[1])):
-        if n % 50 == 0:
-            print(n, round(t[1], 2), t[0].cells)</code></pre>
-</details>
-</dd>
 <dt id="src.utility.binsFunc"><code class="name flex">
 <span>def <span class="ident">binsFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>binsFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test bins function</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the bins are correctly printed</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def binsFunc():
+    &#34;&#34;&#34;
+    Function:
+        binsFunc
+    Description:
+        Callback function to test bins function
+    Input:
+        None
+    Output:
+        the bins are correctly printed
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     dataOBJ = DATA()
@@ -649,18 +513,35 @@ def binsFunc():
 <span>def <span class="ident">cliffsFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>cliffsFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test cliffsDelta function</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>all cliffsDelta values are returned correctly</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def cliffsFunc():
+    &#34;&#34;&#34;
+    Function:
+        cliffsFunc
+    Description:
+        Callback function to test cliffsDelta function
+    Input:
+        None
+    Output:
+        all cliffsDelta values are returned correctly
+    &#34;&#34;&#34;
     assert misc.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]) == False, &#34;First cliff fails&#34;
     assert misc.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]) == True, &#34;Second cliff fails&#34;
     t1, t2 = [], []
     for i in range(1000):
-        t1.append(util.rand())
-        t2.append(math.sqrt(util.rand()))
+        t1.append(rand())
+        t2.append(math.sqrt(rand()))
     assert misc.cliffsDelta(t1, t1) == False, &#34;Third cliff fails&#34;
     assert misc.cliffsDelta(t1, t2) == True, &#34;Fourth cliff fails&#34;
     diff, j = False, 1.0
@@ -705,94 +586,6 @@ def binsFunc():
     data2 = data1.clone(data1, data1.rows)
     print(query.stats(data1))
     print(query.stats(data2))</code></pre>
-</details>
-</dd>
-<dt id="src.utility.clusterFunc"><code class="name flex">
-<span>def <span class="ident">clusterFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>clusterFunc</p>
-<h2 id="description">Description</h2>
-<p>Callback function to test cluster function in DATA class</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>the correct data is output from the cluster function</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def clusterFunc():
-    &#34;&#34;&#34;
-    Function:
-        clusterFunc
-    Description:
-        Callback function to test cluster function in DATA class
-    Input:
-        None
-    Output:
-        the correct data is output from the cluster function
-    &#34;&#34;&#34;
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    data = DATA(full_path)
-    show(data.cluster(), &#34;mid&#34;, data.cols.y, 1)</code></pre>
-</details>
-</dd>
-<dt id="src.utility.copyFunc"><code class="name flex">
-<span>def <span class="ident">copyFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def copyFunc():
-    t1 = {&#39;a&#39;: 1, &#39;b&#39;: {&#39;c&#39;: 2, &#39;d&#39;: [3]}}
-    t2 = deepcopy(t1)
-    t2[&#34;b&#34;][&#34;d&#34;][0] = 10000
-    print(&#34;Before: &#34; + str(t1) + &#34;\nAfter: &#34; + str(t2))</code></pre>
-</details>
-</dd>
-<dt id="src.utility.cosine"><code class="name flex">
-<span>def <span class="ident">cosine</span></span>(<span>a, b, c)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>cosine</p>
-<h2 id="description">Description</h2>
-<p>Finds x, y of line between a &amp; b</p>
-<h2 id="input">Input</h2>
-<p>a - First point
-b - Second point
-c - distance between a &amp; b</p>
-<h2 id="output">Output</h2>
-<p>x2 - x of line between a &amp; b
-y - y of line between a &amp; b</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def cosine(a, b, c):
-    &#34;&#34;&#34;
-    Function:
-        cosine
-    Description:
-        Finds x, y of line between a &amp; b
-    Input:
-        a - First point
-        b - Second point
-        c - distance between a &amp; b
-    Output:
-        x2 - x of line between a &amp; b
-        y - y of line between a &amp; b
-    &#34;&#34;&#34;
-    x1 = (a ** 2 + c ** 2 - b ** 2) / (2 * c)
-    x2 = max(0, min(1, x1))
-    y = (abs(a ** 2 - x2 ** 2)) ** 0.5
-    return x2, y</code></pre>
 </details>
 </dd>
 <dt id="src.utility.crashFunc"><code class="name flex">
@@ -903,12 +696,29 @@ y - y of line between a &amp; b</p></div>
 <span>def <span class="ident">distFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>distFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test dist function</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the dist values are correctly added to the NUM object</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def distFunc():
+    &#34;&#34;&#34;
+    Function:
+        distFunc
+    Description:
+        Callback function to test dist function
+    Input:
+        None
+    Output:
+        the dist values are correctly added to the NUM object
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     dataOBJ = DATA()
@@ -1054,19 +864,6 @@ fun - callback function to use for test case</p>
     print(&#34;r&#34;, query.stats(r))</code></pre>
 </details>
 </dd>
-<dt id="src.utility.last"><code class="name flex">
-<span>def <span class="ident">last</span></span>(<span>t)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def last(t):
-    return t[-1]</code></pre>
-</details>
-</dd>
 <dt id="src.utility.numFunc"><code class="name flex">
 <span>def <span class="ident">numFunc</span></span>(<span>)</span>
 </code></dt>
@@ -1117,58 +914,6 @@ fun - callback function to use for test case</p>
     pass</code></pre>
 </details>
 </dd>
-<dt id="src.utility.printCLIvalues"><code class="name flex">
-<span>def <span class="ident">printCLIvalues</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>printCLIvalues</p>
-<h2 id="description">Description</h2>
-<p>Prints the arguments</p>
-<h2 id="input">Input</h2>
-<p>None</p>
-<h2 id="output">Output</h2>
-<p>None</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def printCLIvalues():
-    &#34;&#34;&#34;
-    Function:
-        printCLIvalues
-    Description:
-        Prints the arguments
-    Input:
-        None
-    Output:
-        None
-    &#34;&#34;&#34;
-    cli_args = {}
-    cli_args[&#34;dump&#34;] = args.dump
-    cli_args[&#34;go&#34;] = args.go
-    cli_args[&#34;help&#34;] = args.help
-    cli_args[&#34;seed&#34;] = args.seed
-    cli_args[&#34;file&#34;] = args.file
-    print(cli_args)</code></pre>
-</details>
-</dd>
-<dt id="src.utility.print_all_attributes"><code class="name flex">
-<span>def <span class="ident">print_all_attributes</span></span>(<span>obj)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def print_all_attributes(obj):
-    stringToPrint = &#34;{ &#34;
-    for attr, value in vars(obj).items():
-        stringToPrint += str(attr) + &#34;: &#34; + str(value) + &#34; &#34;
-    return stringToPrint + &#34;}&#34;</code></pre>
-</details>
-</dd>
 <dt id="src.utility.rand"><code class="name flex">
 <span>def <span class="ident">rand</span></span>(<span>low=None, high=None)</span>
 </code></dt>
@@ -1215,7 +960,7 @@ high - high value</p>
 <h2 id="input">Input</h2>
 <p>None</p>
 <h2 id="output">Output</h2>
-<p>checks if m1 equals m2 and that they round to 0.5 as a boolean</p></div>
+<p>checks that 1000 random ints are unique from each other</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1229,7 +974,7 @@ high - high value</p>
     Input:
         None
     Output:
-        checks if m1 equals m2 and that they round to 0.5 as a boolean
+        checks that 1000 random ints are unique from each other
     &#34;&#34;&#34;
     global args
     global Seed
@@ -1241,6 +986,7 @@ high - high value</p>
     u = []
     for i in range(1000):
         u.append(rint(100))
+    Seed = 937162211
     for index, value in enumerate(t):
         if (value != u[index]):
             return False
@@ -1282,90 +1028,6 @@ fun - callback function to be called for each line in the CSV</p>
             fun(line)</code></pre>
 </details>
 </dd>
-<dt id="src.utility.repCols"><code class="name flex">
-<span>def <span class="ident">repCols</span></span>(<span>cols)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def repCols(cols):
-    copyCols = deepcopy(cols)
-    for col in cols:
-        col[-1] = str(col[0]) + &#34;:&#34; + str(col[-1])
-        for j in range(1, len(col)):
-            col[j - 1] = col[j]
-        col.pop()
-    cols.insert(0, [&#39;Num&#39; + str(k) for k in range(len(cols[0]))])
-    cols[0][-1] = &#34;thingX&#34;
-    return DATA(cols)</code></pre>
-</details>
-</dd>
-<dt id="src.utility.repColsFunc"><code class="name flex">
-<span>def <span class="ident">repColsFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def repColsFunc():
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    rawData = dofile(full_path)
-    t = repCols(rawData[&#34;cols&#34;])
-    for col in t.cols.all:
-        print(vars(col))
-    for row in t.rows:
-        print(vars(row))</code></pre>
-</details>
-</dd>
-<dt id="src.utility.repRows"><code class="name flex">
-<span>def <span class="ident">repRows</span></span>(<span>t, rows, u=None)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def repRows(t, rows, u=None):
-    rows = deepcopy(rows)
-    for j, s in enumerate(rows[-1]):
-        rows[0][j] = str(rows[0][j]) + &#34;:&#34; + str(s)
-    rows.pop()
-    for n, row in enumerate(rows):
-        if n==0:
-            row.append(&#34;thingX&#34;)
-        else:
-            u = t[&#34;rows&#34;][len(t[&#34;rows&#34;]) - n]
-            row.append(u[-1])
-    return DATA(rows)</code></pre>
-</details>
-</dd>
-<dt id="src.utility.reprowsFunc"><code class="name flex">
-<span>def <span class="ident">reprowsFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def reprowsFunc():
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    t = dofile(full_path)
-    rows = repRows(t, transpose(t[&#34;cols&#34;]))
-    for col in rows.cols.all:
-        print(vars(col))
-    for row in rows.rows:
-        print(vars(row))</code></pre>
-</details>
-</dd>
 <dt id="src.utility.rint"><code class="name flex">
 <span>def <span class="ident">rint</span></span>(<span>lo=None, hi=None)</span>
 </code></dt>
@@ -1398,62 +1060,33 @@ high - high value</p>
     return math.floor(0.5 + rand(lo, hi))</code></pre>
 </details>
 </dd>
-<dt id="src.utility.show"><code class="name flex">
-<span>def <span class="ident">show</span></span>(<span>node, what=None, cols=None, nPlaces=None, lvl=None)</span>
-</code></dt>
-<dd>
-<div class="desc"><h2 id="function">Function</h2>
-<p>show</p>
-<h2 id="description">Description</h2>
-<p>Displays optimization of data as a tree</p>
-<h2 id="input">Input</h2>
-<p>node - data
-what - stat to display
-cols - data columns
-nPlaces - # of decimal places to display stats
-lvl - how deep the tree is</p>
-<h2 id="output">Output</h2>
-<p>None</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def show(node, what= None, cols = None, nPlaces = None, lvl=None):
-    &#34;&#34;&#34;
-    Function:
-        show
-    Description:
-        Displays optimization of data as a tree
-    Input:
-        node - data
-        what - stat to display
-        cols - data columns
-        nPlaces - # of decimal places to display stats
-        lvl - how deep the tree is
-    Output:
-        None
-    &#34;&#34;&#34;
-    if node:
-        lvl = lvl or 0
-        print(&#34;|.. &#34; * lvl, end=&#34;&#34;)
-        if (&#34;left&#34; not in node):
-            print(last(last(node[&#34;data&#34;].rows).cells))
-        else:
-            print(str(int(100 * node[&#34;C&#34;])))
-        show(node.get(&#34;left&#34;, None), what,cols, nPlaces, lvl+1)
-        show(node.get(&#34;right&#34;, None), what,cols,nPlaces, lvl+1)</code></pre>
-</details>
-</dd>
 <dt id="src.utility.someFunc"><code class="name flex">
 <span>def <span class="ident">someFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>someFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test add function</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>10000 numbers are added without error</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def someFunc():
+    &#34;&#34;&#34;
+    Function:
+        someFunc
+    Description:
+        Callback function to test add function
+    Input:
+        None
+    Output:
+        10000 numbers are added without error
+    &#34;&#34;&#34;
     global args
     args.Max = 32
     num1 = NUM()
@@ -1516,7 +1149,7 @@ lvl - how deep the tree is</p>
 <h2 id="input">Input</h2>
 <p>None</p>
 <h2 id="output">Output</h2>
-<p>'a' is the median value in the array and that the div to 3 decimal points equals 1.379 as a boolean</p></div>
+<p>'a' is the median value in the array and that the div to 3 decimal points equals 1.38 as a boolean</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -1530,54 +1163,40 @@ lvl - how deep the tree is</p>
     Input:
         None
     Output:
-        &#39;a&#39; is the median value in the array and that the div to 3 decimal points equals 1.379 as a boolean
+        &#39;a&#39; is the median value in the array and that the div to 3 decimal points equals 1.38 as a boolean
     &#34;&#34;&#34;
     sym = adds(SYM(), [&#34;a&#34;,&#34;a&#34;,&#34;a&#34;,&#34;a&#34;,&#34;b&#34;,&#34;b&#34;,&#34;c&#34;])
     print(query.mid(sym), round(query.div(sym), 2))
     return 1.38 == round(query.div(sym), 2)</code></pre>
 </details>
 </dd>
-<dt id="src.utility.synonymsFunc"><code class="name flex">
-<span>def <span class="ident">synonymsFunc</span></span>(<span>)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def synonymsFunc():
-    script_dir = os.path.dirname(__file__)
-    full_path = os.path.join(script_dir, args.file)
-    show(repCols(dofile(full_path)[&#34;cols&#34;]).cluster())</code></pre>
-</details>
-</dd>
-<dt id="src.utility.transpose"><code class="name flex">
-<span>def <span class="ident">transpose</span></span>(<span>t)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def transpose(t):
-    u = []
-    for i in range(len(t[0])):
-        u.append([t[j][i] for j in range(len(t))])
-    return u</code></pre>
-</details>
-</dd>
 <dt id="src.utility.treeFunc"><code class="name flex">
 <span>def <span class="ident">treeFunc</span></span>(<span>)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><h2 id="function">Function</h2>
+<p>treeFunc</p>
+<h2 id="description">Description</h2>
+<p>Callback function to test tree and showTree functions</p>
+<h2 id="input">Input</h2>
+<p>None</p>
+<h2 id="output">Output</h2>
+<p>the tree data is correctly displayed</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def treeFunc():
+    &#34;&#34;&#34;
+    Function:
+        treeFunc
+    Description:
+        Callback function to test tree and showTree functions
+    Input:
+        None
+    Output:
+        the tree data is correctly displayed
+    &#34;&#34;&#34;
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     dataOBJ = DATA()
@@ -1602,14 +1221,10 @@ lvl - how deep the tree is</p>
 </ul>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
-<ul class="">
-<li><code><a title="src.utility.aroundFunc" href="#src.utility.aroundFunc">aroundFunc</a></code></li>
+<ul class="two-column">
 <li><code><a title="src.utility.binsFunc" href="#src.utility.binsFunc">binsFunc</a></code></li>
 <li><code><a title="src.utility.cliffsFunc" href="#src.utility.cliffsFunc">cliffsFunc</a></code></li>
 <li><code><a title="src.utility.cloneFunc" href="#src.utility.cloneFunc">cloneFunc</a></code></li>
-<li><code><a title="src.utility.clusterFunc" href="#src.utility.clusterFunc">clusterFunc</a></code></li>
-<li><code><a title="src.utility.copyFunc" href="#src.utility.copyFunc">copyFunc</a></code></li>
-<li><code><a title="src.utility.cosine" href="#src.utility.cosine">cosine</a></code></li>
 <li><code><a title="src.utility.crashFunc" href="#src.utility.crashFunc">crashFunc</a></code></li>
 <li><code><a title="src.utility.csvFunc" href="#src.utility.csvFunc">csvFunc</a></code></li>
 <li><code><a title="src.utility.dataFunc" href="#src.utility.dataFunc">dataFunc</a></code></li>
@@ -1618,25 +1233,15 @@ lvl - how deep the tree is</p>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
 <li><code><a title="src.utility.halfFunc" href="#src.utility.halfFunc">halfFunc</a></code></li>
-<li><code><a title="src.utility.last" href="#src.utility.last">last</a></code></li>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
 <li><code><a title="src.utility.oo" href="#src.utility.oo">oo</a></code></li>
-<li><code><a title="src.utility.printCLIvalues" href="#src.utility.printCLIvalues">printCLIvalues</a></code></li>
-<li><code><a title="src.utility.print_all_attributes" href="#src.utility.print_all_attributes">print_all_attributes</a></code></li>
 <li><code><a title="src.utility.rand" href="#src.utility.rand">rand</a></code></li>
 <li><code><a title="src.utility.randFunc" href="#src.utility.randFunc">randFunc</a></code></li>
 <li><code><a title="src.utility.readCSV" href="#src.utility.readCSV">readCSV</a></code></li>
-<li><code><a title="src.utility.repCols" href="#src.utility.repCols">repCols</a></code></li>
-<li><code><a title="src.utility.repColsFunc" href="#src.utility.repColsFunc">repColsFunc</a></code></li>
-<li><code><a title="src.utility.repRows" href="#src.utility.repRows">repRows</a></code></li>
-<li><code><a title="src.utility.reprowsFunc" href="#src.utility.reprowsFunc">reprowsFunc</a></code></li>
 <li><code><a title="src.utility.rint" href="#src.utility.rint">rint</a></code></li>
-<li><code><a title="src.utility.show" href="#src.utility.show">show</a></code></li>
 <li><code><a title="src.utility.someFunc" href="#src.utility.someFunc">someFunc</a></code></li>
 <li><code><a title="src.utility.swayFunc" href="#src.utility.swayFunc">swayFunc</a></code></li>
 <li><code><a title="src.utility.symFunc" href="#src.utility.symFunc">symFunc</a></code></li>
-<li><code><a title="src.utility.synonymsFunc" href="#src.utility.synonymsFunc">synonymsFunc</a></code></li>
-<li><code><a title="src.utility.transpose" href="#src.utility.transpose">transpose</a></code></li>
 <li><code><a title="src.utility.treeFunc" href="#src.utility.treeFunc">treeFunc</a></code></li>
 </ul>
 </li>
