@@ -1,0 +1,89 @@
+$ python src/main.py -g all
+
+✅ pass: the
+✅ pass: rand
+✅ pass: some
+1 0.49 0.32
+2 0.24 0.31
+✅ pass: nums
+a 1.38
+✅ pass: syms
+✅ pass: csv
+68.0 455.0 151.0 100.7751937984496
+({'Lbs-': 2807.0, 'Acc+': 15.5, 'Mpg+': 20.0, 'N': 398}, <map object at 0x000001be702f6260>)
+✅ pass: data
+> 1.0 False
+> 1.025 False
+> 1.0506 False
+> 1.0769 True
+✅ pass: cliffs
+({'Lbs-': 2807.0, 'Acc+': 15.5, 'Mpg+': 20.0, 'N': 398}, <map object at 0x000001be702d6b30>)
+({'Lbs-': 2807.0, 'Acc+': 15.5, 'Mpg+': 20.0, 'N': 398}, <map object at 0x000001be702d5ff0>)
+✅ pass: clone
+{'lo': 0.0, 'hi': 0.8746495688429434, 'mid': 1, 'div': 0}
+✅ pass: dist
+199 199
+l ({'Lbs-': 3605.0, 'Acc+': 14.5, 'Mpg+': 20.0, 'N': 199}, <map object at 0x000001be702d4b50>)
+r ({'Lbs-': 2264.0, 'Acc+': 15.9, 'Mpg+': 30.0, 'N': 199}, <map object at 0x000001be702d6a10>)
+✅ pass: half
+[398]({'Lbs-': 2807.0, 'Acc+': 15.5, 'Mpg+': 20.0, 'N': 398}, <map object at 0x000001be709a9480>)
+|.. [199]
+|.. |.. [100]
+|.. |.. |.. [50]
+|.. |.. |.. |.. [25]({'Lbs-': 2525.0, 'Acc+': 16.4, 'Mpg+': 30.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [25]({'Lbs-': 3415.0, 'Acc+': 15.4, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a9480>)
+|.. |.. |.. [50]
+|.. |.. |.. |.. [25]({'Lbs-': 3425.0, 'Acc+': 16.2, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [25]({'Lbs-': 3155.0, 'Acc+': 16.6, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a9480>)
+|.. |.. [99]
+|.. |.. |.. [50]
+|.. |.. |.. |.. [25]({'Lbs-': 4354.0, 'Acc+': 11.5, 'Mpg+': 10.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [25]({'Lbs-': 3777.0, 'Acc+': 13.5, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a9480>)
+|.. |.. |.. [49]
+|.. |.. |.. |.. [25]({'Lbs-': 4325.0, 'Acc+': 12.5, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [24]({'Lbs-': 3988.0, 'Acc+': 14.0, 'Mpg+': 20.0, 'N': 24}, <map object at 0x000001be709a9480>)
+|.. [199]
+|.. |.. [100]
+|.. |.. |.. [50]
+|.. |.. |.. |.. [25]({'Lbs-': 2171.0, 'Acc+': 16.5, 'Mpg+': 30.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [25]({'Lbs-': 2110.0, 'Acc+': 16.6, 'Mpg+': 30.0, 'N': 25}, <map object at 0x000001be709a9480>)
+|.. |.. |.. [50]
+|.. |.. |.. |.. [25]({'Lbs-': 2395.0, 'Acc+': 17.0, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [25]({'Lbs-': 2205.0, 'Acc+': 16.0, 'Mpg+': 30.0, 'N': 25}, <map object at 0x000001be709a9480>)
+|.. |.. [99]
+|.. |.. |.. [50]
+|.. |.. |.. |.. [25]({'Lbs-': 2335.0, 'Acc+': 15.9, 'Mpg+': 30.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [25]({'Lbs-': 2219.0, 'Acc+': 15.3, 'Mpg+': 30.0, 'N': 25}, <map object at 0x000001be709a9480>)
+|.. |.. |.. [49]
+|.. |.. |.. |.. [25]({'Lbs-': 2755.0, 'Acc+': 15.5, 'Mpg+': 20.0, 'N': 25}, <map object at 0x000001be709a8f70>)
+|.. |.. |.. |.. [24]({'Lbs-': 2234.0, 'Acc+': 15.9, 'Mpg+': 30.0, 'N': 24}, <map object at 0x000001be709a9480>)
+✅ pass: tree
+
+all  ({'Lbs-': 2807.0, 'Acc+': 15.5, 'Mpg+': 20.0, 'N': 398}, <map object at 0x000001be702d5f30>)
+     ({'Lbs-': 888.76, 'Acc+': 2.71, 'Mpg+': 7.75, 'N': 398}, <map object at 0x000001be702d67a0>)
+
+best ({'Lbs-': 2395.0, 'Acc+': 17.3, 'Mpg+': 30.0, 'N': 13}, <map object at 0x000001be702d5f30>)
+     ({'Lbs-': 230.62, 'Acc+': 1.82, 'Mpg+': 3.88, 'N': 13}, <map object at 0x000001be702d67a0>)
+
+rest ({'Lbs-': 3015.0, 'Acc+': 15.7, 'Mpg+': 20.0, 'N': 52}, <map object at 0x000001be702d5f30>)
+     ({'Lbs-': 831.01, 'Acc+': 2.71, 'Mpg+': 7.75, 'N': 52}, <map object at 0x000001be702d67a0>)
+
+all ~= best? [(True, 'Lbs-'), (True, 'Acc+'), (True, 'Mpg+')]
+best ~= rest? [(True, 'Lbs-'), (True, 'Acc+'), (True, 'Mpg+')]
+✅ pass: sway
+all    {best= 13, rest= 52}
+Clndrs -inf 4.0 1 {'best': 13, 'rest': 26}
+Clndrs 4.0 inf 0 {'rest': 26}
+Volume -inf 90.0 0 {'best': 6, 'rest': 6}
+Volume 90.0 116.0 0 {'best': 5, 'rest': 10}
+Volume 116.0 140.0 0 {'best': 2, 'rest': 8}
+Volume 140.0 inf 0 {'rest': 28}
+Model -inf 71.0 0 {'rest': 7}
+Model 71.0 73.0 0 {'best': 2, 'rest': 9}
+Model 73.0 74.0 0 {'best': 6, 'rest': 5}
+Model 74.0 75.0 0 {'best': 5, 'rest': 3}
+Model 75.0 inf 0 {'rest': 28}
+origin 1.0 1.0 0 {'rest': 35}
+origin 2.0 2.0 1 {'best': 13, 'rest': 6}
+origin 3.0 3.0 0 {'rest': 11}
+✅ pass: bins
