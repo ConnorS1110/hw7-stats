@@ -14,31 +14,29 @@ def row(data, t):
     return data
 
 
-def add(col, x, n = 1):
+def add(col, x, n = None):
+    def sym(t):
+        t[x] = n + (t.get(x, 0))
+        if t[x] > col.most:
+            col.most, col.mode = t[x], x
+
+    def num(t):
+        col.lo, col.hi = min(x, col.lo), max(x, col.hi)
+        if len(t) < util.args.Max:
+            col.ok = False
+            t.append(x)
+        elif util.rand() < util.args.Max / col.n:
+            col.ok = False
+            t[util.rint(0, len(t) - 1)] = x
+
     if x != "?":
-        col.n += n # Source of variable 'n'
+        n = n or 1
+        col.n += n
         if hasattr(col, "isSym") and col.isSym:
-            col.has[x] = n + (col.has.get(x, 0))
-            if col.has[x] > col.most:
-                col.most = col.has[x]
-                col.mode = x
+            sym(col.has)
         else:
             x = float(x)
-            col.lo = min(x, col.lo)
-            col.hi = max(x, col.hi)
-            all = len(col.has)
-            if all < util.args.Max:
-                pos = all + 1
-            elif random.random() < util.args.Max / col.n:
-                pos = util.rint(1, all)
-            else:
-                pos = None
-            if pos:
-                if isinstance(col.has, dict):
-                    col.has[pos] = x
-                else:
-                    col.has.append(x)
-                col.ok = False
+            num(col.has)
 
 def adds(col, t):
     for value in t or []:

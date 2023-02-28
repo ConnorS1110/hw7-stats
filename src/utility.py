@@ -22,9 +22,10 @@ USAGE: lua bins.lua [OPTIONS] [-g ACTIONS]
 OPTIONS:
   -b  --bins    initial number of bins       = 16
   -c  --cliffs  cliff's delta threshold      = .147
+  -d  --d       different is over sd*d       = .35
   -f  --file    data file                    = ../etc/data/auto93.csv
   -F  --Far     distance to distant          = .95
-  -g  --go      start-up action              = nothing
+  -g  --go      start-up action              = all
   -h  --help    show help                    = false
   -H  --Halves  search space for clustering  = 512
   -m  --min     size of smallest cluster     = .5
@@ -205,6 +206,7 @@ def getCliArgs():
     global args
     parser = argparse.ArgumentParser(add_help=False)
     parser.add_argument("-b", "--bins", type=int, default=16, required=False, help="initial number of bins")
+    parser.add_argument("-d", "--d", type=float, default=0.35, required=False, help="different is over sd*d")
     parser.add_argument("-g", "--go", type=str, default="all", required=False, help="start-up action")
     parser.add_argument("-h", "--help", action='store_true', help="show help")
     parser.add_argument("-s", "--seed", type=int, default=937162211, required=False, help="random number seed")
@@ -270,8 +272,7 @@ def dataFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data = dataOBJ.read(full_path)
+    data = DATA(full_path)
     col = data.cols.x[1].col
     print(col.lo,col.hi, query.mid(col), query.div(col))
     print(query.stats(data))
@@ -289,9 +290,8 @@ def cloneFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data1 = dataOBJ.read(full_path)
-    data2 = data1.clone(data1, data1.rows)
+    data1 = DATA(full_path)
+    data2 = DATA(data1, data1.rows)
     print(query.stats(data1))
     print(query.stats(data2))
 

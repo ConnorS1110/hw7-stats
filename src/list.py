@@ -46,7 +46,7 @@ def per(t, p):
         Row from t based on probability p
     """
     p = math.floor(((p or 0.5) * len(t)))
-    return t[max(0, min(len(t), p))]
+    return t[max(0, min(len(t) - 1, p))]
 
 def kap(listOfCols, fun):
     """

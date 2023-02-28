@@ -118,7 +118,7 @@ def value(has, nB = 1, nR = 1, sGoal = True):
     b,r = b/(nB+1/float("inf")), r/(nR+1/float("inf"))
     return (b ** 2) / (b + r)
 
-def dist(data, t1, t2, cols = None):
+def dist(data, t1, t2, cols=None, d=None, dist1=None):
     """
     Function:
         dist
@@ -132,25 +132,26 @@ def dist(data, t1, t2, cols = None):
     Output:
         Normalized distance between row1 and row2
     """
+    def sym(x, y):
+        return 0 if x == y else 1
+
+    def num(x, y):
+        if x == "?":
+            x = 1 if y < 0.5 else 1
+        if y == "?":
+            y = 1 if x < 0.5 else 1
+        return abs(x - y)
+
     def dist1(col, x, y):
         if x == "?" and y == "?":
             return 1
-        if hasattr(col, "isSym"):
-            return 0 if x == y else 1
-        else:
-            x, y = norm(col, x), norm(col, y)
-            if x == "?":
-                x = 1 if y < 0.5 else 1
-            if y == "?":
-                y = 1 if x < 0.5 else 1
-            return abs(x - y)
+        return sym(x, y) if hasattr(col, "isSym") and col.isSym else num(norm(col, x), norm(col, y))
 
-    d, n = 0, 1 / float("inf")
-    cols = cols if cols else data.cols.x
+    d, cols = 0, cols or data["cols"]["x"]
     for col in cols:
-        n += 1
-        d += dist1(col.col, float(t1[col.col.at]), float(t2[col.col.at]))**util.args.p
-    return (d / n)**(1 / util.args.p)
+        d += dist1(col, t1[col["at"]], t2[col["at"]]) ** util.args.p
+    return (d / len(cols)) ** (1 / util.args.p)
+
 
 def better(data, row1, row2):
     """
@@ -174,3 +175,9 @@ def better(data, row1, row2):
         s2 = s2 - math.exp(col.col.w * (y - x)/len(ys))
 
     return s1/len(ys) < s2 / len(ys)
+
+def betters(data, n = None):
+    def callBack(r1, r2):
+        return better(data, r1, r2)
+    tmp = sorted(data["rows"], key=callBack)
+    return tmp[:n], tmp[n:] if n else tmp
