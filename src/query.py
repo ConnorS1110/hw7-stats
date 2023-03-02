@@ -52,8 +52,8 @@ def div(col):
             for n in col.has.values():
                 e = e - n/col.n * math.log(n/col.n, 2)
         else:
-            for n in col.has:
-                e = e - n/col.n * math.log(n/col.n, 2)
+            for n in col.col.has:
+                e = e - n/col.col.n * math.log(n/col.colc.n, 2)
         return e
     else:
         return (per(has(col),.9) - per(has(col), .1)) / 2.58
@@ -145,11 +145,11 @@ def dist(data, t1, t2, cols=None, d=None, dist1=None):
     def dist1(col, x, y):
         if x == "?" and y == "?":
             return 1
-        return sym(x, y) if hasattr(col, "isSym") and col.isSym else num(norm(col, x), norm(col, y))
+        return sym(x, y) if hasattr(col, "isSym") and col.isSym else num(norm(col,float(x)), norm(col, float(y)))
 
-    d, cols = 0, cols or data["cols"]["x"]
+    d, cols = 0, cols or data.cols.x
     for col in cols:
-        d += dist1(col, t1[col["at"]], t2[col["at"]]) ** util.args.p
+        d += dist1(col.col, t1[col.col.at], t2[col.col.at]) ** util.args.p
     return (d / len(cols)) ** (1 / util.args.p)
 
 

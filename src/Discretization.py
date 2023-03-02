@@ -2,7 +2,7 @@ from range import *
 import update as update
 from query import *
 import utility as util
-import list as list
+import list as LIST
 import math
 from copy import deepcopy
 from rule import RULE
@@ -10,7 +10,7 @@ from rule import RULE
 def bins(cols, rowss):
     def with1Col(col):
         n, ranges = withAllRows(col)
-        ranges = sorted(map(lambda x: x[1], ranges))
+        ranges = sorted(map(lambda x: x, ranges.values()), key = lambda x: x.lo)
         if hasattr(col, "isSym") and col.isSym:
             return ranges
         else:
@@ -25,12 +25,12 @@ def bins(cols, rowss):
                 n += 1
                 k = bin(col, x)
                 if k not in ranges:
-                    ranges[k] = RANGE(col.at, col.txt, x)
+                    ranges[k] = RANGE(col.col.at, col.col.txt, x)
                 extend(ranges[k], x, y)
 
         for y, rows in rowss.items():
             for row in rows:
-                xy(row[col.at], y)
+                xy(row[col.col.at], y)
         return n, ranges
 
     return list(map(with1Col, cols))
@@ -39,8 +39,8 @@ def bins(cols, rowss):
 def bin(col, x):
     if x=="?" or hasattr(col, "isSym"):
         return x
-    tmp = (col.hi - col.lo)/(util.args.bins - 1)
-    return 1 if col.hi == col.lo else math.floor(x / tmp + 0.5) * tmp
+    tmp = (col.col.hi - col.col.lo)/(util.args.bins - 1)
+    return 1 if col.col.hi == col.col.lo else math.floor(float(x) / tmp + 0.5) * tmp
 
 def merges(ranges0, nSmall, nFar):
     def noGaps(t):
@@ -149,7 +149,7 @@ def showRule(rule):
             j += 1
         return t if len(t0) == len(t) else merge(t)
 
-    return list.kap(rule, merges)
+    return LIST.kap(rule, merges)
 
 def selects(rule, rows):
     def disjunction(ranges, row):

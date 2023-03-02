@@ -31,7 +31,7 @@ def half(data, rows = None, cols = None, above = None):
             return {'row': r, 'x': cos(gap(r, A), gap(r, B), c)}
         rows = rows or data.rows
         some = many(rows, util.args.Halves)
-        A = above if hasattr(util.args, "Reuse") else any(some)
+        A = above if util.args.Reuse else any(some)
         tmp = sorted([{"row": r, "d": gap(r, A)} for r in some], key=lambda x: x["d"])
         far = tmp[int(len(tmp)*util.args.Far)]
         B, c = far["row"], far["d"]
@@ -49,7 +49,7 @@ def tree(data, rows = None, cols = None, above = None):
     rows = rows if rows else data.rows
     here = {"data" : DATA(data, rows)}
     if len(rows)>=2*(len(data.rows) ** util.args.min):  # util.args.min needed where 0.5 is
-        left, right, A, B, _ = half(data, rows, cols, above)
+        left, right, A, B, _, _ = half(data, rows, cols, above)
         here["left"] = tree(data, left, cols, A)
         here["right"] = tree(data, right, cols, B)
     return here

@@ -32,7 +32,7 @@ OPTIONS:
   -M  --Max     numbers                      = 512
   -p  --p       dist coefficient             = 2
   -r  --rest    how many of rest to sample   = 4
-  -R  --Reuse   child splits reuse a parent pole = true
+  -R  --Reuse   child splits reuse a parent pole = false
   -s  --seed    random number seed           = 937162211
 """
 
@@ -218,7 +218,7 @@ def getCliArgs():
     parser.add_argument("-m", "--min", type=float, default=0.5, required=False, help="size of smallest cluster")
     parser.add_argument("-M", "--Max", type=int, default=512, required=False, help="numbers")
     parser.add_argument("-r", "--rest", type=int, default=4, required=False, help="how many of rest to sample")
-    parser.add_argument("-R", "--Reuse", type=bool, default=True, required=False, help="child splits reuse a parent pole")
+    parser.add_argument("-R", "--Reuse", type=bool, default=False, required=False, help="child splits reuse a parent pole")
 
     args = parser.parse_args()
 
@@ -308,9 +308,8 @@ def swayFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data = dataOBJ.read(full_path)
-    best, rest = opt.sway(data)
+    data = DATA(full_path)
+    best, rest, _ = opt.sway(data)
     print("\nall ", query.stats(data))
     print("    ",   query.stats(data, query.div))
     print("\nbest", query.stats(best))
@@ -333,11 +332,10 @@ def halfFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data = dataOBJ.read(full_path)
-    left, right, A, B, c = cluster.half(data)
+    data = DATA(full_path)
+    left, right, A, B, c, _ = cluster.half(data)
     print(len(left), len(right))
-    l, r = data.clone(data, left), data.clone(data, right)
+    l, r = DATA(data, left), DATA(data, right)
     print("l", query.stats(l))
     print("r", query.stats(r))
 
@@ -380,8 +378,7 @@ def distFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data = dataOBJ.read(full_path)
+    data = DATA(full_path)
     num  = NUM()
     for row in data.rows:
         add(num, query.dist(data, row, data.rows[0]))
@@ -400,8 +397,7 @@ def treeFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data = dataOBJ.read(full_path)
+    data = DATA(full_path)
     cluster.showTree(cluster.tree(data))
 
 def binsFunc():
@@ -417,13 +413,16 @@ def binsFunc():
     """
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
-    dataOBJ = DATA()
-    data = dataOBJ.read(full_path)
-    best, rest = opt.sway(data)
+    data = DATA(full_path)
+    best, rest, _ = opt.sway(data)
+    b4 = None
     print("all","","","", "{best= " + str(len(best.rows)) + ", rest= " + str(len(rest.rows)) + "}")
     result = disc.bins(data.cols.x, {"best": best.rows, "rest": rest.rows})
     for t in result:
         for range in t:
+            if range.txt != b4:
+                print("")
+            b4 = range.txt
             print(range.txt,
                   range.lo,
                   range.hi,
