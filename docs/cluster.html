@@ -59,7 +59,7 @@ def half(data, rows = None, cols = None, above = None):
             return {&#39;row&#39;: r, &#39;x&#39;: cos(gap(r, A), gap(r, B), c)}
         rows = rows or data.rows
         some = many(rows, util.args.Halves)
-        A = above if hasattr(util.args, &#34;Reuse&#34;) else any(some)
+        A = above if util.args.Reuse else any(some)
         tmp = sorted([{&#34;row&#34;: r, &#34;d&#34;: gap(r, A)} for r in some], key=lambda x: x[&#34;d&#34;])
         far = tmp[int(len(tmp)*util.args.Far)]
         B, c = far[&#34;row&#34;], far[&#34;d&#34;]
@@ -77,7 +77,7 @@ def tree(data, rows = None, cols = None, above = None):
     rows = rows if rows else data.rows
     here = {&#34;data&#34; : DATA(data, rows)}
     if len(rows)&gt;=2*(len(data.rows) ** util.args.min):  # util.args.min needed where 0.5 is
-        left, right, A, B, _ = half(data, rows, cols, above)
+        left, right, A, B, _, _ = half(data, rows, cols, above)
         here[&#34;left&#34;] = tree(data, left, cols, A)
         here[&#34;right&#34;] = tree(data, right, cols, B)
     return here
@@ -162,7 +162,7 @@ c - Distance between A and B</p></div>
             return {&#39;row&#39;: r, &#39;x&#39;: cos(gap(r, A), gap(r, B), c)}
         rows = rows or data.rows
         some = many(rows, util.args.Halves)
-        A = above if hasattr(util.args, &#34;Reuse&#34;) else any(some)
+        A = above if util.args.Reuse else any(some)
         tmp = sorted([{&#34;row&#34;: r, &#34;d&#34;: gap(r, A)} for r in some], key=lambda x: x[&#34;d&#34;])
         far = tmp[int(len(tmp)*util.args.Far)]
         B, c = far[&#34;row&#34;], far[&#34;d&#34;]
@@ -229,7 +229,7 @@ lvl - how deep the tree is</p>
     rows = rows if rows else data.rows
     here = {&#34;data&#34; : DATA(data, rows)}
     if len(rows)&gt;=2*(len(data.rows) ** util.args.min):  # util.args.min needed where 0.5 is
-        left, right, A, B, _ = half(data, rows, cols, above)
+        left, right, A, B, _, _ = half(data, rows, cols, above)
         here[&#34;left&#34;] = tree(data, left, cols, A)
         here[&#34;right&#34;] = tree(data, right, cols, B)
     return here</code></pre>
