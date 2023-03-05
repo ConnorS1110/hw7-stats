@@ -6,7 +6,7 @@ class RULE:
             t[range.txt].append({"lo": range.lo, "hi": range.hi, "at": range.at})
         self.prune(t, maxSize)
 
-    def prune(rule, maxSize):
+    def prune(self, rule, maxSize):
         n = 0
         for txt, ranges in enumerate(rule):
             n += 1

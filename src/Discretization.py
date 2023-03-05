@@ -1,83 +1,161 @@
+from col import COL
 from range import *
 import update as update
 from query import *
 import utility as util
-import list as LIST
 import math
 from copy import deepcopy
+import list as LIST
 from rule import RULE
 
 def bins(cols, rowss):
-    def with1Col(col):
-        n, ranges = withAllRows(col)
-        ranges = sorted(map(lambda x: x, ranges.values()), key = lambda x: x.lo)
-        if hasattr(col, "isSym") and col.isSym:
-            return ranges
-        else:
-            return merges(ranges, n // util.args.bins, util.args.d * div(col))
+    """
+    Function: 
+        bins
+    Description:
+        Computes the bins (ranges of values) for a list of 
+        columns based on the values of each column in a list of rows.
 
-    def withAllRows(col):
-        n, ranges = 0, {}
-
-        def xy(x, y):
-            nonlocal n, ranges
-            if x != "?":
-                n += 1
-                k = bin(col, x)
-                if k not in ranges:
-                    ranges[k] = RANGE(col.col.at, col.col.txt, x)
-                extend(ranges[k], x, y)
-
+    Input:
+        cols
+            a list of columns to compute the bins for.
+        rowss: 
+            a dictionary of rows where each key represents a row label and the value is a list of values for each column.
+    Output:
+        out
+            a list of computed bins (ranges of values) for each column. 
+            Each bin is represented as a list of Range objects. If the column is symbolic, 
+            the list will only contain Range objects. If the column is not symbolic, 
+            the list may contain merged ranges of adjacent bins.
+    """
+    out = []
+    for col in cols:
+        ranges = {}
         for y, rows in rowss.items():
             for row in rows:
-                xy(row[col.col.at], y)
-        return n, ranges
-
-    return list(map(with1Col, cols))
-
+                if (isinstance(col, COL)):
+                    col = col.col
+                x = row[col.at]
+                if x != "?":
+                    k = int(bin(col, float(x) if x != "?" else x))
+                    ranges[k] = ranges[k] if k in ranges else RANGE(col.at, col.txt, float(x) if x != "?" else x)
+                    update.extend(ranges[k], float(x), y)
+        ranges = {key: value for key, value in sorted(ranges.items(), key=lambda x: x[1].lo)}
+        newRanges = {}
+        i = 0
+        for key in ranges:
+            newRanges[i] = ranges[key]
+            i += 1
+        newRangesList = []
+        if hasattr(col, "isSym") and col.isSym:
+            for item in newRanges.values():
+                newRangesList.append(item)
+        out.append(newRangesList if hasattr(col, "isSym") and col.isSym else mergeAny(newRanges))
+    return out
 
 def bin(col, x):
+    """
+    Function:
+        bin
+
+    Description:
+        The bin function takes a column object col and a value x as 
+        input and returns the corresponding bin value for x based on 
+        the range of col. If x is "?" or col is a symbol column, then 
+        the function simply returns x.
+
+    Input:
+        col - A column object containing the range of values to be binned.
+        x - A value to be binned.
+
+    Output:
+        The corresponding bin value for x based on the range of col.
+    """
     if x=="?" or hasattr(col, "isSym"):
         return x
-    tmp = (col.col.hi - col.col.lo)/(util.args.bins - 1)
-    return 1 if col.col.hi == col.col.lo else math.floor(float(x) / tmp + 0.5) * tmp
+    tmp = (col.hi - col.lo)/(util.args.bins - 1)
+    return 1 if col.hi == col.lo else math.floor(x / tmp + 0.5) * tmp
 
-def merges(ranges0, nSmall, nFar):
+def mergeAny(ranges0):
+    """
+    Function:
+        mergeAny
+
+    Description:
+        The mergeAny function takes a list of range objects ranges0 
+        as input and recursively merges adjacent ranges until there 
+        are no more adjacent ranges to merge. The resulting ranges 
+        are returned in a list.
+
+    Input:
+        ranges0 - A list of range objects.
+
+    Output:
+        A list of range objects resulting from merging adjacent ranges in ranges0.
+    """
     def noGaps(t):
         for j in range(1, len(t)):
             t[j].lo = t[j-1].hi
-        t[0].lo  = -float('inf')
-        t[-1].hi = float('inf')
+        t[0].lo = -float("inf")
+        t[-1].hi = float("inf")
         return t
-
-    def try2Merge(left, right, j):
-        y = merged(left.y, right.y, nSmall, nFar)
-        if y:
-            j += 1  # next round, skip over right.
-            left.hi, left.y = right.hi, y
-        return j, left
-
-    ranges1 = []
-    j = 0
+    ranges1, j = [], 0
     while j < len(ranges0):
-        here = ranges0[j]
-        if j < len(ranges0) - 1:
-            j, here = try2Merge(here, ranges0[j+1], j)
+        left, right = ranges0[j], ranges0[j+1] if j + 1 < len(ranges0) else None
+        if right:
+            y = merge2(left.y, right.y)
+            if y:
+               j = j+1
+               left.hi, left.y = right.hi, y
+        ranges1.append(left)
         j += 1
-        ranges1.append(here)
+    return noGaps(ranges0) if len(ranges1)==len(ranges0) else mergeAny(ranges1)
 
-    return noGaps(ranges0) if len(ranges0) == len(ranges1) else merges(ranges1, nSmall, nFar)
+def merge2(col1, col2):
+    """
+    Function:
+        merge2
 
-def merged(col1, col2, nSmall=None, nFar=None):
+    Description:
+        The merge2 function takes two columns col1 and col2 as inputs,
+        merges them using the merge function, and returns the merged 
+        column if the distance between the merged column and the individual
+        columns is less than or equal to the expected distance based on their sizes.
+
+    Input:
+    col1 - A column object containing data to be merged.
+    col2 - A column object containing data to be merged with col1.
+
+    Output:
+        The merged column if the distance between the merged column
+        and the individual columns is less than or equal to the expected
+        distance based on their sizes. Otherwise, no output is returned.
+    """
     new = merge(col1, col2)
-    if nSmall and col1.n < nSmall or col2.n < nSmall:
-        return new
-    if nFar and not (hasattr(col1, "isSym") and col1.isSym) and abs(mid(col1) - mid(col2)) < nFar:
-        return new
-    if div(new) <= (div(col1)*col1.n + div(col2)*col2.n) / new.n:
+    if div(new) <= (div(col1)*col1.n + div(col2)*col2.n)/new.n:
         return new
 
 def merge(col1, col2):
+    """
+    Function:
+        merge
+
+    Description:
+        The merge function takes two columns col1 and col2 as inputs and returns
+        a new column that contains all the data from both input columns. If col1
+        has the isSym attribute set to True, it merges the data in col2 with the
+        data in col1 using the has dictionary. Otherwise, it merges the data using
+        the has list. Additionally, if col1 does not have the isSym attribute set to True, 
+        it updates the lo and hi attributes of the new column to the minimum and maximum 
+        values of the lo and hi attributes of the input columns, respectively.
+
+    Input:
+        col1 - A column object containing data to be merged.
+        col2 - A column object containing data to be merged with col1.
+
+    Output:
+        A new column object that contains all the data from col1 and col2.
+    """
     new = deepcopy(col1)
     if hasattr(col1, "isSym") and col1.isSym:
         for x, n in col2.has.items():
@@ -92,16 +170,14 @@ def merge(col1, col2):
 def xpln(data, best, rest):
     def v(has):
         return value(has, len(best.rows), len(rest.rows), "best")
-
     def score(ranges):
         rule = RULE(ranges, maxSizes)
         if rule:
             print(showRule(rule))
-            bestr = selects(rule, best.rows)
-            restr = selects(rule, rest.rows)
+            bestr= selects(rule, best.rows)
+            restr= selects(rule, rest.rows)
             if len(bestr) + len(restr) > 0:
                 return v({"best": len(bestr), "rest": len(restr)}), rule
-
     tmp, maxSizes = [], {}
     for ranges in bins(data.cols.x, {"best": best.rows, "rest": rest.rows}):
         maxSizes[ranges[0].txt] = len(ranges)
@@ -115,9 +191,9 @@ def xpln(data, best, rest):
 
 def firstN(sortedRanges, scoreFun):
     print("")
-    first = sortedRanges[0].val
+    first = sortedRanges[0]["val"]
     def useful(range):
-        if range.val > 0.05 and range.val > first / 10:
+        if range["val"] > 0.05 and range["val"] > first / 10:
             return range
 
     sortedRanges = list(filter(lambda x: x is not None, map(useful, sortedRanges)))

@@ -428,3 +428,10 @@ def binsFunc():
                   range.hi,
                   round(query.value(range.y.has, len(best.rows), len(rest.rows), "best")),
                   range.y.has)
+def explnFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    data = DATA(full_path)
+    best, rest, _ = opt.sway(data)
+    rule, most= disc.xpln(data,best,rest)
+    print(rule, most)
