@@ -34,7 +34,7 @@
             t[range.txt].append({&#34;lo&#34;: range.lo, &#34;hi&#34;: range.hi, &#34;at&#34;: range.at})
         self.prune(t, maxSize)
 
-    def prune(rule, maxSize):
+    def prune(self, rule, maxSize):
         n = 0
         for txt, ranges in enumerate(rule):
             n += 1
@@ -71,7 +71,7 @@
             t[range.txt].append({&#34;lo&#34;: range.lo, &#34;hi&#34;: range.hi, &#34;at&#34;: range.at})
         self.prune(t, maxSize)
 
-    def prune(rule, maxSize):
+    def prune(self, rule, maxSize):
         n = 0
         for txt, ranges in enumerate(rule):
             n += 1
@@ -83,7 +83,7 @@
 <h3>Methods</h3>
 <dl>
 <dt id="src.rule.RULE.prune"><code class="name flex">
-<span>def <span class="ident">prune</span></span>(<span>rule, maxSize)</span>
+<span>def <span class="ident">prune</span></span>(<span>self, rule, maxSize)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -91,7 +91,7 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def prune(rule, maxSize):
+<pre><code class="python">def prune(self, rule, maxSize):
     n = 0
     for txt, ranges in enumerate(rule):
         n += 1

@@ -455,7 +455,14 @@ def binsFunc():
                   range.lo,
                   range.hi,
                   round(query.value(range.y.has, len(best.rows), len(rest.rows), &#34;best&#34;)),
-                  range.y.has)</code></pre>
+                  range.y.has)
+def explnFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    data = DATA(full_path)
+    best, rest, _ = opt.sway(data)
+    rule, most= disc.xpln(data,best,rest)
+    print(rule, most)</code></pre>
 </details>
 </section>
 <section>
@@ -777,6 +784,24 @@ fun - callback function to use for test case</p>
     global help
     egs[key] = fun
     help += f&#34;  -g {key}    {string}&#34;</code></pre>
+</details>
+</dd>
+<dt id="src.utility.explnFunc"><code class="name flex">
+<span>def <span class="ident">explnFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def explnFunc():
+    script_dir = os.path.dirname(__file__)
+    full_path = os.path.join(script_dir, args.file)
+    data = DATA(full_path)
+    best, rest, _ = opt.sway(data)
+    rule, most= disc.xpln(data,best,rest)
+    print(rule, most)</code></pre>
 </details>
 </dd>
 <dt id="src.utility.getCliArgs"><code class="name flex">
@@ -1228,6 +1253,7 @@ high - high value</p>
 <li><code><a title="src.utility.distFunc" href="#src.utility.distFunc">distFunc</a></code></li>
 <li><code><a title="src.utility.dofile" href="#src.utility.dofile">dofile</a></code></li>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
+<li><code><a title="src.utility.explnFunc" href="#src.utility.explnFunc">explnFunc</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
 <li><code><a title="src.utility.halfFunc" href="#src.utility.halfFunc">halfFunc</a></code></li>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
