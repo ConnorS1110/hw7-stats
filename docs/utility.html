@@ -456,13 +456,21 @@ def binsFunc():
                   range.hi,
                   round(query.value(range.y.has, len(best.rows), len(rest.rows), &#34;best&#34;)),
                   range.y.has)
+
 def explnFunc():
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     data = DATA(full_path)
-    best, rest, _ = opt.sway(data)
-    rule, most= disc.xpln(data,best,rest)
-    print(rule, most)</code></pre>
+    best, rest, evals = opt.sway(data)
+    rule, _ = disc.xpln(data, best, rest)
+    print(&#34;\n-----------\nexplain=&#34;, disc.showRule(rule))
+    data1 = DATA(data, disc.selects(rule, data.rows))
+    print(&#34;all                &#34;, query.stats(data), query.stats(data, query.div))
+    print(f&#34;sway with   {evals} evals&#34;, query.stats(best), query.stats(best, query.div))
+    print(f&#34;xpln on     {evals} evals&#34;, query.stats(data1), query.stats(data1, query.div))
+    top, _ = query.betters(data, len(best.rows))
+    top = DATA(data, top)
+    print(f&#34;sort with {len(data.rows)} evals&#34;, query.stats(top), query.stats(top, query.div))</code></pre>
 </details>
 </section>
 <section>
@@ -799,9 +807,16 @@ fun - callback function to use for test case</p>
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     data = DATA(full_path)
-    best, rest, _ = opt.sway(data)
-    rule, most= disc.xpln(data,best,rest)
-    print(rule, most)</code></pre>
+    best, rest, evals = opt.sway(data)
+    rule, _ = disc.xpln(data, best, rest)
+    print(&#34;\n-----------\nexplain=&#34;, disc.showRule(rule))
+    data1 = DATA(data, disc.selects(rule, data.rows))
+    print(&#34;all                &#34;, query.stats(data), query.stats(data, query.div))
+    print(f&#34;sway with   {evals} evals&#34;, query.stats(best), query.stats(best, query.div))
+    print(f&#34;xpln on     {evals} evals&#34;, query.stats(data1), query.stats(data1, query.div))
+    top, _ = query.betters(data, len(best.rows))
+    top = DATA(data, top)
+    print(f&#34;sort with {len(data.rows)} evals&#34;, query.stats(top), query.stats(top, query.div))</code></pre>
 </details>
 </dd>
 <dt id="src.utility.getCliArgs"><code class="name flex">

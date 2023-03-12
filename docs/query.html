@@ -106,7 +106,8 @@ def stats(data, fun = None, cols = None, nPlaces = 2):
         return round((fun or mid)(col), nPlaces), col.txt
     tmp = kap(cols, callBack)
     tmp[&#34;N&#34;] = len(data.rows)
-    return tmp, map(mid, cols)
+    return tmp
+    # return tmp, map(mid, cols)
 
 def norm(num, n):
     &#34;&#34;&#34;
@@ -140,9 +141,9 @@ def value(has, nB = 1, nR = 1, sGoal = True):
     b, r = 0, 0
     for x, n in has.items():
         if x == sGoal:
-            b = b + n
+            b += n
         else:
-            r = r + n
+            r += n
     b,r = b/(nB+1/float(&#34;inf&#34;)), r/(nR+1/float(&#34;inf&#34;))
     return (b ** 2) / (b + r)
 
@@ -186,28 +187,42 @@ def better(data, row1, row2):
     Function:
         better
     Description:
-        Returns whether the half is better than the other
+        Returns whether a row is better than the other
     Input:
         data - data to compares
         row1 - first row
         row2 - second row
     Output:
-        Boolean whether first half is better than second half
+        Boolean whether second row is better than first row
     &#34;&#34;&#34;
     s1, s2, ys = 0, 0, data.cols.y
     for col in ys:
         x = norm(col.col, float(row1[col.col.at]) if row1[col.col.at] != &#34;?&#34; else row1[col.col.at])
         y = norm(col.col, float(row2[col.col.at]) if row2[col.col.at] != &#34;?&#34; else row2[col.col.at])
 
-        s1 = s1 - math.exp(col.col.w * (x-y)/len(ys))
-        s2 = s2 - math.exp(col.col.w * (y - x)/len(ys))
+        s1 -= math.exp(col.col.w * (x-y)/len(ys))
+        s2 -= math.exp(col.col.w * (y - x)/len(ys))
 
     return s1/len(ys) &lt; s2 / len(ys)
 
 def betters(data, n = None):
-    def callBack(r1, r2):
-        return better(data, r1, r2)
-    tmp = sorted(data[&#34;rows&#34;], key=callBack)
+    def quicksort(arr, cmp_func):
+        if len(arr) &lt;= 1:
+            return arr
+
+        pivot = arr[0]
+        left = []
+        right = []
+
+        for item in arr[1:]:
+            if cmp_func(data, item, pivot) == True:
+                left.append(item)
+            else:
+                right.append(item)
+
+        return quicksort(left, cmp_func) + [pivot] + quicksort(right, cmp_func)
+
+    tmp = quicksort(data.rows, better)
     return tmp[:n], tmp[n:] if n else tmp</code></pre>
 </details>
 </section>
@@ -225,13 +240,13 @@ def betters(data, n = None):
 <div class="desc"><h2 id="function">Function</h2>
 <p>better</p>
 <h2 id="description">Description</h2>
-<p>Returns whether the half is better than the other</p>
+<p>Returns whether a row is better than the other</p>
 <h2 id="input">Input</h2>
 <p>data - data to compares
 row1 - first row
 row2 - second row</p>
 <h2 id="output">Output</h2>
-<p>Boolean whether first half is better than second half</p></div>
+<p>Boolean whether second row is better than first row</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -241,21 +256,21 @@ row2 - second row</p>
     Function:
         better
     Description:
-        Returns whether the half is better than the other
+        Returns whether a row is better than the other
     Input:
         data - data to compares
         row1 - first row
         row2 - second row
     Output:
-        Boolean whether first half is better than second half
+        Boolean whether second row is better than first row
     &#34;&#34;&#34;
     s1, s2, ys = 0, 0, data.cols.y
     for col in ys:
         x = norm(col.col, float(row1[col.col.at]) if row1[col.col.at] != &#34;?&#34; else row1[col.col.at])
         y = norm(col.col, float(row2[col.col.at]) if row2[col.col.at] != &#34;?&#34; else row2[col.col.at])
 
-        s1 = s1 - math.exp(col.col.w * (x-y)/len(ys))
-        s2 = s2 - math.exp(col.col.w * (y - x)/len(ys))
+        s1 -= math.exp(col.col.w * (x-y)/len(ys))
+        s2 -= math.exp(col.col.w * (y - x)/len(ys))
 
     return s1/len(ys) &lt; s2 / len(ys)</code></pre>
 </details>
@@ -270,9 +285,23 @@ row2 - second row</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def betters(data, n = None):
-    def callBack(r1, r2):
-        return better(data, r1, r2)
-    tmp = sorted(data[&#34;rows&#34;], key=callBack)
+    def quicksort(arr, cmp_func):
+        if len(arr) &lt;= 1:
+            return arr
+
+        pivot = arr[0]
+        left = []
+        right = []
+
+        for item in arr[1:]:
+            if cmp_func(data, item, pivot) == True:
+                left.append(item)
+            else:
+                right.append(item)
+
+        return quicksort(left, cmp_func) + [pivot] + quicksort(right, cmp_func)
+
+    tmp = quicksort(data.rows, better)
     return tmp[:n], tmp[n:] if n else tmp</code></pre>
 </details>
 </dd>
@@ -507,7 +536,8 @@ nPlaces - # of decimal places stat is rounded to</p>
         return round((fun or mid)(col), nPlaces), col.txt
     tmp = kap(cols, callBack)
     tmp[&#34;N&#34;] = len(data.rows)
-    return tmp, map(mid, cols)</code></pre>
+    return tmp
+    # return tmp, map(mid, cols)</code></pre>
 </details>
 </dd>
 <dt id="src.query.value"><code class="name flex">
@@ -546,9 +576,9 @@ sGoal - Goal value to find frequency of</p>
     b, r = 0, 0
     for x, n in has.items():
         if x == sGoal:
-            b = b + n
+            b += n
         else:
-            r = r + n
+            r += n
     b,r = b/(nB+1/float(&#34;inf&#34;)), r/(nR+1/float(&#34;inf&#34;))
     return (b ** 2) / (b + r)</code></pre>
 </details>

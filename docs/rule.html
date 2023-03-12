@@ -26,74 +26,59 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class RULE:
-    def __init__(self, ranges, maxSize):
-        t = []
-        for range in ranges:
-            t[range.txt] = t[range.txt] or {}
-            t[range.txt].append({&#34;lo&#34;: range.lo, &#34;hi&#34;: range.hi, &#34;at&#34;: range.at})
-        self.prune(t, maxSize)
+<pre><code class="python">def RULE(ranges, maxSize):
+    t = {}
+    for range in ranges:
+        t[range.txt] = t[range.txt] if range.txt in t else []
+        t[range.txt].append({&#34;lo&#34;: range.lo, &#34;hi&#34;: range.hi, &#34;at&#34;: range.at})
+    return prune(t, maxSize)
 
-    def prune(self, rule, maxSize):
-        n = 0
-        for txt, ranges in enumerate(rule):
-            n += 1
-            if len(ranges) == maxSize[txt]:
-                n += 1
-                rule[txt] = None
-        if n &gt; 0: return rule</code></pre>
-</details>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-</section>
-<section>
-<h2 class="section-title" id="header-classes">Classes</h2>
-<dl>
-<dt id="src.rule.RULE"><code class="flex name class">
-<span>class <span class="ident">RULE</span></span>
-<span>(</span><span>ranges, maxSize)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class RULE:
-    def __init__(self, ranges, maxSize):
-        t = []
-        for range in ranges:
-            t[range.txt] = t[range.txt] or {}
-            t[range.txt].append({&#34;lo&#34;: range.lo, &#34;hi&#34;: range.hi, &#34;at&#34;: range.at})
-        self.prune(t, maxSize)
-
-    def prune(self, rule, maxSize):
-        n = 0
-        for txt, ranges in enumerate(rule):
-            n += 1
-            if len(ranges) == maxSize[txt]:
-                n += 1
-                rule[txt] = None
-        if n &gt; 0: return rule</code></pre>
-</details>
-<h3>Methods</h3>
-<dl>
-<dt id="src.rule.RULE.prune"><code class="name flex">
-<span>def <span class="ident">prune</span></span>(<span>self, rule, maxSize)</span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">def prune(self, rule, maxSize):
+def prune(rule, maxSize):
     n = 0
-    for txt, ranges in enumerate(rule):
+    for txt, ranges in rule.items():
+        n += 1
+        if len(ranges) == maxSize[txt]:
+            n += 1
+            rule[txt] = None
+    if n &gt; 0: return rule</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-functions">Functions</h2>
+<dl>
+<dt id="src.rule.RULE"><code class="name flex">
+<span>def <span class="ident">RULE</span></span>(<span>ranges, maxSize)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def RULE(ranges, maxSize):
+    t = {}
+    for range in ranges:
+        t[range.txt] = t[range.txt] if range.txt in t else []
+        t[range.txt].append({&#34;lo&#34;: range.lo, &#34;hi&#34;: range.hi, &#34;at&#34;: range.at})
+    return prune(t, maxSize)</code></pre>
+</details>
+</dd>
+<dt id="src.rule.prune"><code class="name flex">
+<span>def <span class="ident">prune</span></span>(<span>rule, maxSize)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def prune(rule, maxSize):
+    n = 0
+    for txt, ranges in rule.items():
         n += 1
         if len(ranges) == maxSize[txt]:
             n += 1
@@ -102,8 +87,8 @@
 </details>
 </dd>
 </dl>
-</dd>
-</dl>
+</section>
+<section>
 </section>
 </article>
 <nav id="sidebar">
@@ -117,14 +102,10 @@
 <li><code><a title="src" href="index.html">src</a></code></li>
 </ul>
 </li>
-<li><h3><a href="#header-classes">Classes</a></h3>
-<ul>
-<li>
-<h4><code><a title="src.rule.RULE" href="#src.rule.RULE">RULE</a></code></h4>
+<li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
-<li><code><a title="src.rule.RULE.prune" href="#src.rule.RULE.prune">prune</a></code></li>
-</ul>
-</li>
+<li><code><a title="src.rule.RULE" href="#src.rule.RULE">RULE</a></code></li>
+<li><code><a title="src.rule.prune" href="#src.rule.prune">prune</a></code></li>
 </ul>
 </li>
 </ul>
