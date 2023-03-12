@@ -428,10 +428,18 @@ def binsFunc():
                   range.hi,
                   round(query.value(range.y.has, len(best.rows), len(rest.rows), "best")),
                   range.y.has)
+
 def explnFunc():
     script_dir = os.path.dirname(__file__)
     full_path = os.path.join(script_dir, args.file)
     data = DATA(full_path)
-    best, rest, _ = opt.sway(data)
-    rule, most= disc.xpln(data,best,rest)
-    print(rule, most)
+    best, rest, evals = opt.sway(data)
+    rule, _ = disc.xpln(data, best, rest)
+    print("\n-----------\nexplain=", disc.showRule(rule))
+    data1 = DATA(data, disc.selects(rule, data.rows))
+    print("all                ", query.stats(data), query.stats(data, query.div))
+    print(f"sway with   {evals} evals", query.stats(best), query.stats(best, query.div))
+    print(f"xpln on     {evals} evals", query.stats(data1), query.stats(data1, query.div))
+    top, _ = query.betters(data, len(best.rows))
+    top = DATA(data, top)
+    print(f"sort with {len(data.rows)} evals", query.stats(top), query.stats(top, query.div))

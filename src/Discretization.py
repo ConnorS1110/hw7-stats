@@ -5,27 +5,27 @@ from query import *
 import utility as util
 import math
 from copy import deepcopy
-import list as LIST
+import list as lst
 from rule import RULE
 
 def bins(cols, rowss):
     """
-    Function: 
+    Function:
         bins
     Description:
-        Computes the bins (ranges of values) for a list of 
+        Computes the bins (ranges of values) for a list of
         columns based on the values of each column in a list of rows.
 
     Input:
         cols
             a list of columns to compute the bins for.
-        rowss: 
+        rowss:
             a dictionary of rows where each key represents a row label and the value is a list of values for each column.
     Output:
         out
-            a list of computed bins (ranges of values) for each column. 
-            Each bin is represented as a list of Range objects. If the column is symbolic, 
-            the list will only contain Range objects. If the column is not symbolic, 
+            a list of computed bins (ranges of values) for each column.
+            Each bin is represented as a list of Range objects. If the column is symbolic,
+            the list will only contain Range objects. If the column is not symbolic,
             the list may contain merged ranges of adjacent bins.
     """
     out = []
@@ -59,9 +59,9 @@ def bin(col, x):
         bin
 
     Description:
-        The bin function takes a column object col and a value x as 
-        input and returns the corresponding bin value for x based on 
-        the range of col. If x is "?" or col is a symbol column, then 
+        The bin function takes a column object col and a value x as
+        input and returns the corresponding bin value for x based on
+        the range of col. If x is "?" or col is a symbol column, then
         the function simply returns x.
 
     Input:
@@ -82,9 +82,9 @@ def mergeAny(ranges0):
         mergeAny
 
     Description:
-        The mergeAny function takes a list of range objects ranges0 
-        as input and recursively merges adjacent ranges until there 
-        are no more adjacent ranges to merge. The resulting ranges 
+        The mergeAny function takes a list of range objects ranges0
+        as input and recursively merges adjacent ranges until there
+        are no more adjacent ranges to merge. The resulting ranges
         are returned in a list.
 
     Input:
@@ -118,7 +118,7 @@ def merge2(col1, col2):
 
     Description:
         The merge2 function takes two columns col1 and col2 as inputs,
-        merges them using the merge function, and returns the merged 
+        merges them using the merge function, and returns the merged
         column if the distance between the merged column and the individual
         columns is less than or equal to the expected distance based on their sizes.
 
@@ -145,8 +145,8 @@ def merge(col1, col2):
         a new column that contains all the data from both input columns. If col1
         has the isSym attribute set to True, it merges the data in col2 with the
         data in col1 using the has dictionary. Otherwise, it merges the data using
-        the has list. Additionally, if col1 does not have the isSym attribute set to True, 
-        it updates the lo and hi attributes of the new column to the minimum and maximum 
+        the has list. Additionally, if col1 does not have the isSym attribute set to True,
+        it updates the lo and hi attributes of the new column to the minimum and maximum
         values of the lo and hi attributes of the input columns, respectively.
 
     Input:
@@ -191,16 +191,18 @@ def xpln(data, best, rest):
 
 def firstN(sortedRanges, scoreFun):
     print("")
+    for r in sortedRanges:
+        print(r["range"].txt, r["range"].lo, r["range"].hi, round(r["val"], 2), r["range"].y.has)
     first = sortedRanges[0]["val"]
     def useful(range):
         if range["val"] > 0.05 and range["val"] > first / 10:
             return range
 
-    sortedRanges = list(filter(lambda x: x is not None, map(useful, sortedRanges)))
+    sortedRanges = list(filter(useful, sortedRanges))
     most, out = -1, None
 
     for n in range(len(sortedRanges)):
-        tmp, rule = scoreFun(list(map(lambda x: x.range, sortedRanges[:n])))
+        tmp, rule = scoreFun([r["range"] for r in sortedRanges[:n + 1]]) or (None, None)
 
         if tmp and tmp > most:
             out, most = rule, tmp
@@ -225,15 +227,18 @@ def showRule(rule):
             j += 1
         return t if len(t0) == len(t) else merge(t)
 
-    return LIST.kap(rule, merges)
+    return lst.kap(rule, merges)
 
 def selects(rule, rows):
     def disjunction(ranges, row):
         for range in ranges:
-            lo, hi, at = range['lo'], range['hi'], range['at']
+            lo = int(range['lo']) if isinstance(range['lo'], str) else range['lo']
+            hi = int(range['hi']) if isinstance(range['hi'], str) else range['hi']
+            at = int(range['at'])
             x = row[at]
             if x == "?":
                 return True
+            x = float(x)
             if lo == hi and lo == x:
                 return True
             if lo <= x and x < hi:
@@ -241,7 +246,7 @@ def selects(rule, rows):
         return False
 
     def conjunction(row):
-        for ranges in rule:
+        for ranges in rule.values():
             if not disjunction(ranges, row):
                 return False
         return True

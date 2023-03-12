@@ -78,7 +78,8 @@ def stats(data, fun = None, cols = None, nPlaces = 2):
         return round((fun or mid)(col), nPlaces), col.txt
     tmp = kap(cols, callBack)
     tmp["N"] = len(data.rows)
-    return tmp, map(mid, cols)
+    return tmp
+    # return tmp, map(mid, cols)
 
 def norm(num, n):
     """
@@ -112,9 +113,9 @@ def value(has, nB = 1, nR = 1, sGoal = True):
     b, r = 0, 0
     for x, n in has.items():
         if x == sGoal:
-            b = b + n
+            b += n
         else:
-            r = r + n
+            r += n
     b,r = b/(nB+1/float("inf")), r/(nR+1/float("inf"))
     return (b ** 2) / (b + r)
 
@@ -158,26 +159,40 @@ def better(data, row1, row2):
     Function:
         better
     Description:
-        Returns whether the half is better than the other
+        Returns whether a row is better than the other
     Input:
         data - data to compares
         row1 - first row
         row2 - second row
     Output:
-        Boolean whether first half is better than second half
+        Boolean whether second row is better than first row
     """
     s1, s2, ys = 0, 0, data.cols.y
     for col in ys:
         x = norm(col.col, float(row1[col.col.at]) if row1[col.col.at] != "?" else row1[col.col.at])
         y = norm(col.col, float(row2[col.col.at]) if row2[col.col.at] != "?" else row2[col.col.at])
 
-        s1 = s1 - math.exp(col.col.w * (x-y)/len(ys))
-        s2 = s2 - math.exp(col.col.w * (y - x)/len(ys))
+        s1 -= math.exp(col.col.w * (x-y)/len(ys))
+        s2 -= math.exp(col.col.w * (y - x)/len(ys))
 
     return s1/len(ys) < s2 / len(ys)
 
 def betters(data, n = None):
-    def callBack(r1, r2):
-        return better(data, r1, r2)
-    tmp = sorted(data["rows"], key=callBack)
+    def quicksort(arr, cmp_func):
+        if len(arr) <= 1:
+            return arr
+
+        pivot = arr[0]
+        left = []
+        right = []
+
+        for item in arr[1:]:
+            if cmp_func(data, item, pivot) == True:
+                left.append(item)
+            else:
+                right.append(item)
+
+        return quicksort(left, cmp_func) + [pivot] + quicksort(right, cmp_func)
+
+    tmp = quicksort(data.rows, better)
     return tmp[:n], tmp[n:] if n else tmp

@@ -61,9 +61,15 @@ def kap(listOfCols, fun):
         u - map of anonymous functions
     """
     u = {}
-    for k, v in enumerate(listOfCols):
-        v, k = fun(k, v)
-        u[k or len(u)+1] = v
+
+    if isinstance(listOfCols, list):
+        items = enumerate(listOfCols)
+    else:
+        items = listOfCols.items()
+
+    for k, v in items:
+            v, k = fun(k, v)
+            u[k or len(u)+1] = v
     return u
 
 def slice(t, go = None, stop = None, inc = None):
