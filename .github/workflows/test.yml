@@ -42,4 +42,4 @@ jobs:
         fi
     - name: Run tests
       run: |
-        sh -c "python src/main.py -g all";
+        sh -c "python src/main.py";
