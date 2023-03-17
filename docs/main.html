@@ -43,15 +43,11 @@ def main(funs):
     &#34;&#34;&#34;
     fails = 0
     getCliArgs()
-    if (utility.args.help):
-        print(utility.help)
-    else:
-        for what, _ in funs.items():
-            if utility.args.go == &#34;all&#34; or what == utility.args.go:
-                if funs[what]() == False:
-                    fails += 1
-                    print(&#34;❌ fail:&#34;,what)
-                else: print(&#34;✅ pass:&#34;,what)
+    for what, _ in funs.items():
+            if funs[what]() == False:
+                fails += 1
+                print(&#34;❌ fail:&#34;,what)
+            else: print(&#34;✅ pass:&#34;,what)
     if (fails == 0): return 0
     else: return 1
 
@@ -97,15 +93,11 @@ if __name__ == &#34;__main__&#34;:
     &#34;&#34;&#34;
     fails = 0
     getCliArgs()
-    if (utility.args.help):
-        print(utility.help)
-    else:
-        for what, _ in funs.items():
-            if utility.args.go == &#34;all&#34; or what == utility.args.go:
-                if funs[what]() == False:
-                    fails += 1
-                    print(&#34;❌ fail:&#34;,what)
-                else: print(&#34;✅ pass:&#34;,what)
+    for what, _ in funs.items():
+            if funs[what]() == False:
+                fails += 1
+                print(&#34;❌ fail:&#34;,what)
+            else: print(&#34;✅ pass:&#34;,what)
     if (fails == 0): return 0
     else: return 1</code></pre>
 </details>

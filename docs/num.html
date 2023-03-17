@@ -26,16 +26,15 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class NUM:
-    def __init__(self, n = 0, s = &#34;&#34;):
-        self.at = n
-        self.txt = s
+<pre><code class="python">import functions as fun
+class NUM:
+    def __init__(self, t = []):
         self.n = 0
-        self.lo = float(&#39;inf&#39;)
-        self.hi = float(&#39;-inf&#39;)
-        self.ok = True
-        self.has = []
-        self.w = -1 if s.endswith(&#34;-&#34;) else 1</code></pre>
+        self.mu = 0
+        self.m2 = 0
+        self.sd = 0
+        for x in t:
+            fun.add(self, x)</code></pre>
 </details>
 </section>
 <section>
@@ -49,7 +48,7 @@
 <dl>
 <dt id="src.num.NUM"><code class="flex name class">
 <span>class <span class="ident">NUM</span></span>
-<span>(</span><span>n=0, s='')</span>
+<span>(</span><span>t=[])</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -58,15 +57,13 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class NUM:
-    def __init__(self, n = 0, s = &#34;&#34;):
-        self.at = n
-        self.txt = s
+    def __init__(self, t = []):
         self.n = 0
-        self.lo = float(&#39;inf&#39;)
-        self.hi = float(&#39;-inf&#39;)
-        self.ok = True
-        self.has = []
-        self.w = -1 if s.endswith(&#34;-&#34;) else 1</code></pre>
+        self.mu = 0
+        self.m2 = 0
+        self.sd = 0
+        for x in t:
+            fun.add(self, x)</code></pre>
 </details>
 </dd>
 </dl>
