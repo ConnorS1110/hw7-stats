@@ -68,7 +68,7 @@ def getCliArgs():
     parser.add_argument(&#34;--conf&#34;, type=float, default = 0.05, required=False)
     parser.add_argument(&#34;--cliff&#34;, type=float, default = 0.4, required=False)
     parser.add_argument(&#34;--cohen&#34;, type=float, default = 0.35, required=False)
-    parser.add_argument(&#34;--Fmt&#34;, type=str, default = &#34;:6.2f&#34;, required=False)
+    parser.add_argument(&#34;--Fmt&#34;, type=str, default = &#34;%6.2f&#34;, required=False)
     parser.add_argument(&#34;--width&#34;, type=int, default = 40, required=False)
 
     args = parser.parse_args()
@@ -123,7 +123,40 @@ def basicFunc():
         print(&#34;\t\tfalse&#34;, fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]),
                         fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]))
         print(&#34;\t\tfalse&#34;, fun.bootstrap([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]),
-                        fun.cliffsDelta([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]))</code></pre>
+                        fun.cliffsDelta([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]))
+        
+def preFunc():
+    print(&#34;\neg3&#34;)
+    d = 1
+    for i in range(10):
+        t1, t2 = [], []
+        for j in range(32):
+            t1.append(fun.gaussian(10, 1))
+            t2.append(fun.gaussian(d * 10, 1))
+        print(&#34;\t&#34;, d, &#34;true&#34; if d &lt; 1.1 else &#34;false&#34;, fun.bootstrap(t1, t2), fun.bootstrap(t1, t1))
+        d += 0.05
+
+
+def fiveFunc():
+    rx_test = [fun.RX([0.34,0.49,0.51,0.6,.34,.49,.51,.6],&#34;rx1&#34;), 
+                     fun.RX([0.6,0.7,0.8,0.9,.6,.7,.8,.9],&#34;rx2&#34;), 
+                     fun.RX([0.15,0.25,0.4,0.35,0.15,0.25,0.4,0.35],&#34;rx3&#34;), 
+                     fun.RX([0.6,0.7,0.8,0.9,0.6,0.7,0.8,0.9],&#34;rx4&#34;), 
+                     fun.RX([0.1,0.2,0.3,0.4,0.1,0.2,0.3,0.4],&#34;rx5&#34;)]
+    sk = fun.scottKnot(rx_test)
+    tiles_sk = fun.tiles(sk)
+    for rx in tiles_sk:
+        print(rx[&#34;name&#34;], rx[&#34;rank&#34;], rx[&#34;show&#34;])
+
+def sixFunc():
+    rx_test = [fun.RX([101,100,99,101,99.5,101,100,99,101,99.5],&#34;rx1&#34;), 
+                     fun.RX([101,100,99,101,100,101,100,99,101,100],&#34;rx2&#34;), 
+                     fun.RX([101,100,99.5,101,99,101,100,99.5,101,99],&#34;rx3&#34;), 
+                     fun.RX([101,100,99,101,100,101,100,99,101,100],&#34;rx4&#34;)]
+    sk = fun.scottKnot(rx_test)
+    tiles_sk = fun.tiles(sk)
+    for rx in tiles_sk:
+        print(rx[&#34;name&#34;], rx[&#34;rank&#34;], rx[&#34;show&#34;])</code></pre>
 </details>
 </section>
 <section>
@@ -213,6 +246,27 @@ fun - callback function to use for test case</p>
     egs[key] = fun</code></pre>
 </details>
 </dd>
+<dt id="src.utility.fiveFunc"><code class="name flex">
+<span>def <span class="ident">fiveFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def fiveFunc():
+    rx_test = [fun.RX([0.34,0.49,0.51,0.6,.34,.49,.51,.6],&#34;rx1&#34;), 
+                     fun.RX([0.6,0.7,0.8,0.9,.6,.7,.8,.9],&#34;rx2&#34;), 
+                     fun.RX([0.15,0.25,0.4,0.35,0.15,0.25,0.4,0.35],&#34;rx3&#34;), 
+                     fun.RX([0.6,0.7,0.8,0.9,0.6,0.7,0.8,0.9],&#34;rx4&#34;), 
+                     fun.RX([0.1,0.2,0.3,0.4,0.1,0.2,0.3,0.4],&#34;rx5&#34;)]
+    sk = fun.scottKnot(rx_test)
+    tiles_sk = fun.tiles(sk)
+    for rx in tiles_sk:
+        print(rx[&#34;name&#34;], rx[&#34;rank&#34;], rx[&#34;show&#34;])</code></pre>
+</details>
+</dd>
 <dt id="src.utility.gaussFunc"><code class="name flex">
 <span>def <span class="ident">gaussFunc</span></span>(<span>)</span>
 </code></dt>
@@ -263,7 +317,7 @@ fun - callback function to use for test case</p>
     parser.add_argument(&#34;--conf&#34;, type=float, default = 0.05, required=False)
     parser.add_argument(&#34;--cliff&#34;, type=float, default = 0.4, required=False)
     parser.add_argument(&#34;--cohen&#34;, type=float, default = 0.35, required=False)
-    parser.add_argument(&#34;--Fmt&#34;, type=str, default = &#34;:6.2f&#34;, required=False)
+    parser.add_argument(&#34;--Fmt&#34;, type=str, default = &#34;%6.2f&#34;, required=False)
     parser.add_argument(&#34;--width&#34;, type=int, default = 40, required=False)
 
     args = parser.parse_args()</code></pre>
@@ -313,6 +367,27 @@ fun - callback function to use for test case</p>
     print(random.seed(1))</code></pre>
 </details>
 </dd>
+<dt id="src.utility.preFunc"><code class="name flex">
+<span>def <span class="ident">preFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def preFunc():
+    print(&#34;\neg3&#34;)
+    d = 1
+    for i in range(10):
+        t1, t2 = [], []
+        for j in range(32):
+            t1.append(fun.gaussian(10, 1))
+            t2.append(fun.gaussian(d * 10, 1))
+        print(&#34;\t&#34;, d, &#34;true&#34; if d &lt; 1.1 else &#34;false&#34;, fun.bootstrap(t1, t2), fun.bootstrap(t1, t1))
+        d += 0.05</code></pre>
+</details>
+</dd>
 <dt id="src.utility.sampleFunc"><code class="name flex">
 <span>def <span class="ident">sampleFunc</span></span>(<span>)</span>
 </code></dt>
@@ -325,6 +400,26 @@ fun - callback function to use for test case</p>
 <pre><code class="python">def sampleFunc():
     for i in range(10):
         print(&#34;&#34;, &#34;&#34;.join(fun.samples([&#34;a&#34;, &#34;b&#34;, &#34;c&#34;, &#34;d&#34;, &#34;e&#34;])))</code></pre>
+</details>
+</dd>
+<dt id="src.utility.sixFunc"><code class="name flex">
+<span>def <span class="ident">sixFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def sixFunc():
+    rx_test = [fun.RX([101,100,99,101,99.5,101,100,99,101,99.5],&#34;rx1&#34;), 
+                     fun.RX([101,100,99,101,100,101,100,99,101,100],&#34;rx2&#34;), 
+                     fun.RX([101,100,99.5,101,99,101,100,99.5,101,99],&#34;rx3&#34;), 
+                     fun.RX([101,100,99,101,100,101,100,99,101,100],&#34;rx4&#34;)]
+    sk = fun.scottKnot(rx_test)
+    tiles_sk = fun.tiles(sk)
+    for rx in tiles_sk:
+        print(rx[&#34;name&#34;], rx[&#34;rank&#34;], rx[&#34;show&#34;])</code></pre>
 </details>
 </dd>
 </dl>
@@ -348,11 +443,14 @@ fun - callback function to use for test case</p>
 <li><code><a title="src.utility.basicFunc" href="#src.utility.basicFunc">basicFunc</a></code></li>
 <li><code><a title="src.utility.bootFunc" href="#src.utility.bootFunc">bootFunc</a></code></li>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
+<li><code><a title="src.utility.fiveFunc" href="#src.utility.fiveFunc">fiveFunc</a></code></li>
 <li><code><a title="src.utility.gaussFunc" href="#src.utility.gaussFunc">gaussFunc</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
 <li><code><a title="src.utility.numFunc" href="#src.utility.numFunc">numFunc</a></code></li>
 <li><code><a title="src.utility.okFunc" href="#src.utility.okFunc">okFunc</a></code></li>
+<li><code><a title="src.utility.preFunc" href="#src.utility.preFunc">preFunc</a></code></li>
 <li><code><a title="src.utility.sampleFunc" href="#src.utility.sampleFunc">sampleFunc</a></code></li>
+<li><code><a title="src.utility.sixFunc" href="#src.utility.sixFunc">sixFunc</a></code></li>
 </ul>
 </li>
 </ul>

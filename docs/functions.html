@@ -119,12 +119,12 @@ def RX(t, s = None):
     return {&#34;name&#34;: s or &#34;&#34;, &#34;rank&#34;: 0, &#34;n&#34;: len(t), &#34;show&#34;: &#34;&#34;, &#34;has&#34;: t}
 
 def mid(t):
-    t = t[&#34;has&#34;] if hasattr(t, &#34;has&#34;) else t
+    t = t[&#34;has&#34;] if &#34;has&#34; in t else t
     n = len(t) // 2
     return len(t) % 2 == 0 and (t[n] + t[n + 1]) / 2 or t[n + 1]
 
 def div(t):
-    t = t[&#34;has&#34;] if hasattr(t, &#34;has&#34;) else t
+    t = t[&#34;has&#34;] if &#34;has&#34; in t else t
     return (t[len(t) * 9 // 10] - t[len(t) * 1 // 10]) / 2.56
 
 def merge(rx1, rx2):
@@ -147,13 +147,14 @@ def scottKnot(rxs):
         r = merges(cut + 1, hi)
         return cliffsDelta(l[&#34;has&#34;], r[&#34;has&#34;]) and bootstrap(l[&#34;has&#34;], r[&#34;has&#34;])
     def recurse(lo, hi, rank):
+        cut = None
         b4 = merges(lo, hi)
         best = 0
         for j in range(lo, hi + 1):
             if j &lt; hi:
                 l = merges(lo, j)
                 r = merges(j + 1, hi)
-                now = (l[&#34;n&#34;] * (mid(1) - mid(b4)) ** 2 + r[&#34;n&#34;] * (mid(r) - mid(b4)) ** 2) / (l[&#34;n&#34;] + r[&#34;n&#34;])
+                now = (l[&#34;n&#34;] * (mid(l) - mid(b4)) ** 2 + r[&#34;n&#34;] * (mid(r) - mid(b4)) ** 2) / (l[&#34;n&#34;] + r[&#34;n&#34;])
                 if now &gt; best:
                     if abs(mid(l) - mid(r)) &gt; cohen:
                         cut, best = j, now
@@ -178,20 +179,21 @@ def tiles(rxs):
     for rx in rxs:
         t, u = rx[&#34;has&#34;], []
         def of(x, most): return max(1, minF(most, x))
-        def at(x): return t[of(len(t) * x // 1, len(t) - 1)]
+        def at(x): 
+            return t[of(int(len(t) * x), len(t) - 1)]
         def pos(x): return floor(of(util.args.width * (x - lo) / (hi - lo + smallPositive) // 1, util.args.width))
         for _ in range(util.args.width): u.append(&#34; &#34;)
         a, b, c, d, e= at(.1), at(.3), at(.5), at(.7), at(.9)
         A, B, C, D, E= pos(a), pos(b), pos(c), pos(d), pos(e)
-        for i in range(A, B + 1):
+        for i in range(A, B):
             u[i] = &#34;-&#34;
-        for i in range(D, E + 1):
+        for i in range(D, E):
             u[i] = &#34;-&#34;
         u[util.args.width // 2] = &#34;|&#34;
         u[C] = &#34;*&#34;
-        rx[&#34;show&#34;] = &#34;&#34;.join(u) + &#34; { &#34; + util.args.Fmt.format(a) + &#34;}&#34;
+        rx[&#34;show&#34;] = &#34;&#34;.join(u) + &#34; { %6.2f&#34; % a  + &#34;}&#34;
         for x in (b, c, d, e):
-            rx[&#34;show&#34;] += &#34;, &#34; + util.args.Fmt.format(x)
+            rx[&#34;show&#34;] += &#34;, %6.2f&#34; % a
         rx[&#34;show&#34;] += &#34; }&#34;
     return rxs</code></pre>
 </details>
@@ -327,7 +329,7 @@ ns2 - second list of rows</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def div(t):
-    t = t[&#34;has&#34;] if hasattr(t, &#34;has&#34;) else t
+    t = t[&#34;has&#34;] if &#34;has&#34; in t else t
     return (t[len(t) * 9 // 10] - t[len(t) * 1 // 10]) / 2.56</code></pre>
 </details>
 </dd>
@@ -403,7 +405,7 @@ ns2 - second list of rows</p>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">def mid(t):
-    t = t[&#34;has&#34;] if hasattr(t, &#34;has&#34;) else t
+    t = t[&#34;has&#34;] if &#34;has&#34; in t else t
     n = len(t) // 2
     return len(t) % 2 == 0 and (t[n] + t[n + 1]) / 2 or t[n + 1]</code></pre>
 </details>
@@ -444,13 +446,14 @@ ns2 - second list of rows</p>
         r = merges(cut + 1, hi)
         return cliffsDelta(l[&#34;has&#34;], r[&#34;has&#34;]) and bootstrap(l[&#34;has&#34;], r[&#34;has&#34;])
     def recurse(lo, hi, rank):
+        cut = None
         b4 = merges(lo, hi)
         best = 0
         for j in range(lo, hi + 1):
             if j &lt; hi:
                 l = merges(lo, j)
                 r = merges(j + 1, hi)
-                now = (l[&#34;n&#34;] * (mid(1) - mid(b4)) ** 2 + r[&#34;n&#34;] * (mid(r) - mid(b4)) ** 2) / (l[&#34;n&#34;] + r[&#34;n&#34;])
+                now = (l[&#34;n&#34;] * (mid(l) - mid(b4)) ** 2 + r[&#34;n&#34;] * (mid(r) - mid(b4)) ** 2) / (l[&#34;n&#34;] + r[&#34;n&#34;])
                 if now &gt; best:
                     if abs(mid(l) - mid(r)) &gt; cohen:
                         cut, best = j, now
@@ -485,20 +488,21 @@ ns2 - second list of rows</p>
     for rx in rxs:
         t, u = rx[&#34;has&#34;], []
         def of(x, most): return max(1, minF(most, x))
-        def at(x): return t[of(len(t) * x // 1, len(t) - 1)]
+        def at(x): 
+            return t[of(int(len(t) * x), len(t) - 1)]
         def pos(x): return floor(of(util.args.width * (x - lo) / (hi - lo + smallPositive) // 1, util.args.width))
         for _ in range(util.args.width): u.append(&#34; &#34;)
         a, b, c, d, e= at(.1), at(.3), at(.5), at(.7), at(.9)
         A, B, C, D, E= pos(a), pos(b), pos(c), pos(d), pos(e)
-        for i in range(A, B + 1):
+        for i in range(A, B):
             u[i] = &#34;-&#34;
-        for i in range(D, E + 1):
+        for i in range(D, E):
             u[i] = &#34;-&#34;
         u[util.args.width // 2] = &#34;|&#34;
         u[C] = &#34;*&#34;
-        rx[&#34;show&#34;] = &#34;&#34;.join(u) + &#34; { &#34; + util.args.Fmt.format(a) + &#34;}&#34;
+        rx[&#34;show&#34;] = &#34;&#34;.join(u) + &#34; { %6.2f&#34; % a  + &#34;}&#34;
         for x in (b, c, d, e):
-            rx[&#34;show&#34;] += &#34;, &#34; + util.args.Fmt.format(x)
+            rx[&#34;show&#34;] += &#34;, %6.2f&#34; % a
         rx[&#34;show&#34;] += &#34; }&#34;
     return rxs</code></pre>
 </details>
