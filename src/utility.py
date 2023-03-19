@@ -72,3 +72,27 @@ def gaussFunc():
         t.append(fun.gaussian(10, 2))
     n = NUM(t)
     print(n.n, n.mu, n.sd)
+
+def bootFunc():
+    a, b = [], []
+    for i in range(100):
+        a.append(fun.gaussian(10, 1))
+    print("","mu","sd","cliffs","boot","both")
+    print("","--","--","------","----","----")
+    mu = 10.0
+    while mu <= 11.0:
+        b.clear()
+        for i in range(100):
+            b.append(fun.gaussian(mu, 1))
+        cl = fun.cliffsDelta(a, b)
+        bs = fun.bootstrap(a, b)
+        print("", mu, 1, cl, bs, cl and bs)
+        mu += 0.1
+
+def basicFunc():
+        print("\t\ttruee", fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]),
+                        fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]))
+        print("\t\tfalse", fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]),
+                        fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]))
+        print("\t\tfalse", fun.bootstrap([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]),
+                        fun.cliffsDelta([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]))
