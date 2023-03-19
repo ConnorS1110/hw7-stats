@@ -99,7 +99,31 @@ def gaussFunc():
     for i in range(10 ** 4 + 1):
         t.append(fun.gaussian(10, 2))
     n = NUM(t)
-    print(n.n, n.mu, n.sd)</code></pre>
+    print(n.n, n.mu, n.sd)
+
+def bootFunc():
+    a, b = [], []
+    for i in range(100):
+        a.append(fun.gaussian(10, 1))
+    print(&#34;&#34;,&#34;mu&#34;,&#34;sd&#34;,&#34;cliffs&#34;,&#34;boot&#34;,&#34;both&#34;)
+    print(&#34;&#34;,&#34;--&#34;,&#34;--&#34;,&#34;------&#34;,&#34;----&#34;,&#34;----&#34;)
+    mu = 10.0
+    while mu &lt;= 11.0:
+        b.clear()
+        for i in range(100):
+            b.append(fun.gaussian(mu, 1))
+        cl = fun.cliffsDelta(a, b)
+        bs = fun.bootstrap(a, b)
+        print(&#34;&#34;, mu, 1, cl, bs, cl and bs)
+        mu += 0.1
+
+def basicFunc():
+        print(&#34;\t\ttruee&#34;, fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]),
+                        fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]))
+        print(&#34;\t\tfalse&#34;, fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]),
+                        fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]))
+        print(&#34;\t\tfalse&#34;, fun.bootstrap([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]),
+                        fun.cliffsDelta([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]))</code></pre>
 </details>
 </section>
 <section>
@@ -109,6 +133,50 @@ def gaussFunc():
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="src.utility.basicFunc"><code class="name flex">
+<span>def <span class="ident">basicFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def basicFunc():
+        print(&#34;\t\ttruee&#34;, fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]),
+                        fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [8, 7, 6, 2, 5, 8, 7, 3]))
+        print(&#34;\t\tfalse&#34;, fun.bootstrap([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]),
+                        fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]))
+        print(&#34;\t\tfalse&#34;, fun.bootstrap([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]),
+                        fun.cliffsDelta([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]))</code></pre>
+</details>
+</dd>
+<dt id="src.utility.bootFunc"><code class="name flex">
+<span>def <span class="ident">bootFunc</span></span>(<span>)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bootFunc():
+    a, b = [], []
+    for i in range(100):
+        a.append(fun.gaussian(10, 1))
+    print(&#34;&#34;,&#34;mu&#34;,&#34;sd&#34;,&#34;cliffs&#34;,&#34;boot&#34;,&#34;both&#34;)
+    print(&#34;&#34;,&#34;--&#34;,&#34;--&#34;,&#34;------&#34;,&#34;----&#34;,&#34;----&#34;)
+    mu = 10.0
+    while mu &lt;= 11.0:
+        b.clear()
+        for i in range(100):
+            b.append(fun.gaussian(mu, 1))
+        cl = fun.cliffsDelta(a, b)
+        bs = fun.bootstrap(a, b)
+        print(&#34;&#34;, mu, 1, cl, bs, cl and bs)
+        mu += 0.1</code></pre>
+</details>
+</dd>
 <dt id="src.utility.eg"><code class="name flex">
 <span>def <span class="ident">eg</span></span>(<span>key, string, fun)</span>
 </code></dt>
@@ -277,6 +345,8 @@ fun - callback function to use for test case</p>
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="two-column">
+<li><code><a title="src.utility.basicFunc" href="#src.utility.basicFunc">basicFunc</a></code></li>
+<li><code><a title="src.utility.bootFunc" href="#src.utility.bootFunc">bootFunc</a></code></li>
 <li><code><a title="src.utility.eg" href="#src.utility.eg">eg</a></code></li>
 <li><code><a title="src.utility.gaussFunc" href="#src.utility.gaussFunc">gaussFunc</a></code></li>
 <li><code><a title="src.utility.getCliArgs" href="#src.utility.getCliArgs">getCliArgs</a></code></li>
