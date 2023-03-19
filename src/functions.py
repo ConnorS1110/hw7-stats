@@ -91,12 +91,12 @@ def RX(t, s = None):
     return {"name": s or "", "rank": 0, "n": len(t), "show": "", "has": t}
 
 def mid(t):
-    t = t["has"] if hasattr(t, "has") else t
+    t = t["has"] if "has" in t else t
     n = len(t) // 2
     return len(t) % 2 == 0 and (t[n] + t[n + 1]) / 2 or t[n + 1]
 
 def div(t):
-    t = t["has"] if hasattr(t, "has") else t
+    t = t["has"] if "has" in t else t
     return (t[len(t) * 9 // 10] - t[len(t) * 1 // 10]) / 2.56
 
 def merge(rx1, rx2):
@@ -119,13 +119,14 @@ def scottKnot(rxs):
         r = merges(cut + 1, hi)
         return cliffsDelta(l["has"], r["has"]) and bootstrap(l["has"], r["has"])
     def recurse(lo, hi, rank):
+        cut = None
         b4 = merges(lo, hi)
         best = 0
         for j in range(lo, hi + 1):
             if j < hi:
                 l = merges(lo, j)
                 r = merges(j + 1, hi)
-                now = (l["n"] * (mid(1) - mid(b4)) ** 2 + r["n"] * (mid(r) - mid(b4)) ** 2) / (l["n"] + r["n"])
+                now = (l["n"] * (mid(l) - mid(b4)) ** 2 + r["n"] * (mid(r) - mid(b4)) ** 2) / (l["n"] + r["n"])
                 if now > best:
                     if abs(mid(l) - mid(r)) > cohen:
                         cut, best = j, now
@@ -150,19 +151,20 @@ def tiles(rxs):
     for rx in rxs:
         t, u = rx["has"], []
         def of(x, most): return max(1, minF(most, x))
-        def at(x): return t[of(len(t) * x // 1, len(t) - 1)]
+        def at(x): 
+            return t[of(int(len(t) * x), len(t) - 1)]
         def pos(x): return floor(of(util.args.width * (x - lo) / (hi - lo + smallPositive) // 1, util.args.width))
         for _ in range(util.args.width): u.append(" ")
         a, b, c, d, e= at(.1), at(.3), at(.5), at(.7), at(.9)
         A, B, C, D, E= pos(a), pos(b), pos(c), pos(d), pos(e)
-        for i in range(A, B + 1):
+        for i in range(A, B):
             u[i] = "-"
-        for i in range(D, E + 1):
+        for i in range(D, E):
             u[i] = "-"
         u[util.args.width // 2] = "|"
         u[C] = "*"
-        rx["show"] = "".join(u) + " { " + util.args.Fmt.format(a) + "}"
+        rx["show"] = "".join(u) + " { %6.2f" % a  + "}"
         for x in (b, c, d, e):
-            rx["show"] += ", " + util.args.Fmt.format(x)
+            rx["show"] += ", %6.2f" % a
         rx["show"] += " }"
     return rxs

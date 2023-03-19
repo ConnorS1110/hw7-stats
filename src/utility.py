@@ -40,7 +40,7 @@ def getCliArgs():
     parser.add_argument("--conf", type=float, default = 0.05, required=False)
     parser.add_argument("--cliff", type=float, default = 0.4, required=False)
     parser.add_argument("--cohen", type=float, default = 0.35, required=False)
-    parser.add_argument("--Fmt", type=str, default = ":6.2f", required=False)
+    parser.add_argument("--Fmt", type=str, default = "%6.2f", required=False)
     parser.add_argument("--width", type=int, default = 40, required=False)
 
     args = parser.parse_args()
@@ -96,3 +96,37 @@ def basicFunc():
                         fun.cliffsDelta([8, 7, 6, 2, 5, 8, 7, 3], [9, 9, 7, 8, 10, 9, 6]))
         print("\t\tfalse", fun.bootstrap([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]),
                         fun.cliffsDelta([0.34, 0.49, 0.51, 0.6, 0.34, 0.49, 0.51, 0.6], [0.6, 0.7, 0.8, 0.9, 0.6, 0.7, 0.8, 0.9]))
+        
+def preFunc():
+    print("\neg3")
+    d = 1
+    for i in range(10):
+        t1, t2 = [], []
+        for j in range(32):
+            t1.append(fun.gaussian(10, 1))
+            t2.append(fun.gaussian(d * 10, 1))
+        print("\t", d, "true" if d < 1.1 else "false", fun.bootstrap(t1, t2), fun.bootstrap(t1, t1))
+        d += 0.05
+
+
+def fiveFunc():
+    rx_test = [fun.RX([0.34,0.49,0.51,0.6,.34,.49,.51,.6],"rx1"), 
+                     fun.RX([0.6,0.7,0.8,0.9,.6,.7,.8,.9],"rx2"), 
+                     fun.RX([0.15,0.25,0.4,0.35,0.15,0.25,0.4,0.35],"rx3"), 
+                     fun.RX([0.6,0.7,0.8,0.9,0.6,0.7,0.8,0.9],"rx4"), 
+                     fun.RX([0.1,0.2,0.3,0.4,0.1,0.2,0.3,0.4],"rx5")]
+    sk = fun.scottKnot(rx_test)
+    tiles_sk = fun.tiles(sk)
+    for rx in tiles_sk:
+        print(rx["name"], rx["rank"], rx["show"])
+
+def sixFunc():
+    rx_test = [fun.RX([101,100,99,101,99.5,101,100,99,101,99.5],"rx1"), 
+                     fun.RX([101,100,99,101,100,101,100,99,101,100],"rx2"), 
+                     fun.RX([101,100,99.5,101,99,101,100,99.5,101,99],"rx3"), 
+                     fun.RX([101,100,99,101,100,101,100,99,101,100],"rx4")]
+    sk = fun.scottKnot(rx_test)
+    tiles_sk = fun.tiles(sk)
+    for rx in tiles_sk:
+        print(rx["name"], rx["rank"], rx["show"])
+
