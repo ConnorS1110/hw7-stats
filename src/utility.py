@@ -130,3 +130,59 @@ def sixFunc():
     for rx in tiles_sk:
         print(rx["name"], rx["rank"], rx["show"])
 
+def tilesFunc():
+    rxs,a,b,c,d,e,f,g,h,j,k=[],[],[],[],[],[],[],[],[],[],[]
+    for i in range(1000):
+        a.append(fun.gaussian(10,1))
+    for i in range(1000):
+        b.append(fun.gaussian(10.1,1))
+    for i in range(1000):
+        c.append(fun.gaussian(20,1))
+    for i in range(1000):
+        d.append(fun.gaussian(30,1))
+    for i in range(1000):
+        e.append(fun.gaussian(30.1,1))
+    for i in range(1000):
+        f.append(fun.gaussian(10,1))
+    for i in range(1000):
+        g.append(fun.gaussian(10,1))
+    for i in range(1000):
+        h.append(fun.gaussian(40,1))
+    for i in range(1000):
+        j.append(fun.gaussian(40,3))
+    for i in range(1000):
+        k.append(fun.gaussian(10,1))
+    for u, v in enumerate([a, b, c, d, e, f, g, h, j, k]):
+        rxs.append(fun.RX(v, "rx" + str(u)))
+    rxs.sort(key=lambda a: fun.mid(a))
+    for rx in fun.tiles(rxs):
+        print("",rx["name"],rx["show"])
+
+def skFunc():
+    rxs,a,b,c,d,e,f,g,h,j,k=[],[],[],[],[],[],[],[],[],[],[]
+    for i in range(1000):
+        a.append(fun.gaussian(10,1))
+    for i in range(1000):
+        b.append(fun.gaussian(10.1,1))
+    for i in range(1000):
+        c.append(fun.gaussian(20,1))
+    for i in range(1000):
+        d.append(fun.gaussian(30,1))
+    for i in range(1000):
+        e.append(fun.gaussian(30.1,1))
+    for i in range(1000):
+        f.append(fun.gaussian(10,1))
+    for i in range(1000):
+        g.append(fun.gaussian(10,1))
+    for i in range(1000):
+        h.append(fun.gaussian(40,1))
+    for i in range(1000):
+        j.append(fun.gaussian(40,3))
+    for i in range(1000):
+        k.append(fun.gaussian(10,1))
+    for u, v in enumerate([a, b, c, d, e, f, g, h, j, k]):
+        rxs.append(fun.RX(v, "rx" + str(u)))
+    for rx in fun.tiles(fun.scottKnot(rxs)):
+        print("",rx["rank"],rx["name"],rx["show"])
+
+    
